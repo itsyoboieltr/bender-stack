@@ -39,12 +39,8 @@ export default function App() {
           }
           value={todo.data}
           onChangeText={(data) => setTodo({ data })}
-          onKeyPress={({ nativeEvent: { key } }) => {
-            if (
-              key === 'Enter' &&
-              !todoAdd.isPending &&
-              validate(todoInsertSchema, todo)
-            )
+          onSubmitEditing={() => {
+            if (!todoAdd.isPending && validate(todoInsertSchema, todo))
               todoAdd.mutate();
           }}
         />
