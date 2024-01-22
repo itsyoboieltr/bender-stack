@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/itsyoboieltr/bender-stack/assets/72046715/9b20eaa6-5e01-4b12-aa01-afc56c90d7d5" width="250" alt="BENDER stack">
+</p>
+
 <h1 align="center">
   BENDER stack
 </h1>
