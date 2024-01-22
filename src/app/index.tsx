@@ -50,7 +50,7 @@ export default function App() {
             {
               'bg-gray-400': todoAddingDisabled,
               'hover:bg-gray-400 active:bg-gray-500': !todoAddingDisabled,
-            },
+            }
           )}
           disabled={todoAddingDisabled}
           onPress={() => todoAdd.mutate()}>

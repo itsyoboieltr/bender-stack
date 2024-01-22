@@ -23,7 +23,7 @@ export default function Todo(props: TodoProps) {
           {
             'bg-red-400': todoDeletingDisabled,
             'hover:bg-red-400 active:bg-red-500': !todoDeletingDisabled,
-          },
+          }
         )}
         disabled={todoDeletingDisabled}
         onPress={() => todoDelete.mutate()}>
