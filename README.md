@@ -6,7 +6,7 @@
   BENDER stack
 </h1>
 
-The `BENDER` stack is a bun-based 🔥 `BLAZINGLY FAST` 🔥 full-stack `100% type-safe` native and web development solution that provides `everything` you need to build `production-ready` native and web apps. It consists of:
+The `BENDER` 🤖 stack is a bun-based 🔥 `BLAZINGLY FAST` 🔥 full-stack `100% type-safe` native and web development solution that provides `everything` you need to build `production-ready` native and web apps. It consists of:
 
 - [Bun](https://bun.sh)
 - [Elysia](https://elysiajs.com)
