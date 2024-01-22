@@ -81,8 +81,6 @@ If everything is set up correctly, you can start the `development server` with:
 bun dev
 ```
 
-<p style="color: red">ATTENTION!</p>
-
 Unless you are running the development server and the app on the same device locally, you need to set the `EXPO_PUBLIC_HOST_URL` environment variable to the `public url` of your server. This is required for the app to do API calls, as your computer's `localhost` is not accessible from external devices (such as your phone), even if they are on the same network.
 
 ```bash
