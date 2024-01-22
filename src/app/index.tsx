@@ -29,9 +29,7 @@ export default function App() {
     <View className={'flex flex-col justify-center items-center gap-4 p-4'}>
       <View className={'gap-2'}>
         {todoQuery.data?.map((todo) => (
-          <View key={todo.id}>
-            <Todo id={todo.id} data={todo.data} />
-          </View>
+          <Todo key={todo.id} id={todo.id} data={todo.data} />
         ))}
       </View>
       <View className={'flex flex-row justify-center gap-4'}>
