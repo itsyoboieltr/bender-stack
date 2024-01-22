@@ -19,7 +19,7 @@ export default function Todo(props: TodoProps) {
       <Text>{props.data}</Text>
       <Pressable
         className={cn(
-          'rounded border-2 border-black bg-red-300 px-4 py-1 transition-all flex flex-row items-center justify-center web:select-none',
+          'rounded border-2 border-black bg-red-300 px-4 py-1 flex flex-row items-center justify-center web:select-none',
           {
             'bg-red-400': todoDeletingDisabled,
             'hover:bg-red-400 active:bg-red-500': !todoDeletingDisabled,
