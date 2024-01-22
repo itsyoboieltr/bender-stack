@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "strictNullChecks": true,
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "~/*": ["./src/*"],
+    },
+  },
+  "extends": "expo/tsconfig.base",
+  "include": ["global.d.ts", "**/*.ts", "**/*.tsx"],
+}

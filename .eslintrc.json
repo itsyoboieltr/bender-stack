@@ -1,0 +1,48 @@
+{
+  "root": true,
+  "extends": [
+    "universe/native",
+    "universe/shared/typescript-analysis",
+    "plugin:drizzle/recommended"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.d.ts"],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+        "react/jsx-curly-brace-presence": [
+          "warn",
+          {
+            "props": "always",
+            "children": "never",
+            "propElementValues": "always"
+          }
+        ],
+        "react-hooks/exhaustive-deps": "off",
+        "react/no-children-prop": "off",
+        "import/newline-after-import": [
+          "warn",
+          {
+            "count": 1
+          }
+        ],
+        "import/no-anonymous-default-export": "off",
+        "drizzle/enforce-delete-with-where": [
+          "error",
+          {
+            "drizzleObjectName": ["db"]
+          }
+        ],
+        "drizzle/enforce-update-with-where": [
+          "error",
+          {
+            "drizzleObjectName": ["db"]
+          }
+        ]
+      }
+    }
+  ]
+}
