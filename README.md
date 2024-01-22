@@ -81,6 +81,20 @@ If everything is set up correctly, you can start the `development server` with:
 bun dev
 ```
 
+<p style="color: red">ATTENTION!</p>
+
+Unless you are running the development server and the app on the same device locally, you need to set the `EXPO_PUBLIC_HOST_URL` environment variable to the `public url` of your server. This is required for the app to do API calls, as your computer's `localhost` is not accessible from external devices (such as your phone), even if they are on the same network.
+
+```bash
+EXPO_PUBLIC_HOST_URL="http://..."
+```
+
+One of the easiest ways to get a public url for your development server is by using [ngrok](https://ngrok.com/). After installing `ngrok`, you can start the development server and expose it to the internet with the following command:
+
+```bash
+ngrok http 3000
+```
+
 ## Building
 
 Build for `production` by running the following command:
