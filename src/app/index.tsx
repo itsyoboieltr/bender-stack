@@ -1,7 +1,7 @@
 import { Create } from '@sinclair/typebox/value';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
 import { app } from './_layout';
 import { todoInsertSchema } from '../server/todo/schema';
@@ -39,6 +39,7 @@ export default function App() {
           }
           value={todo.data}
           onChangeText={(data) => setTodo({ data })}
+          blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
           onSubmitEditing={() => {
             if (!todoAdd.isPending && validate(todoInsertSchema, todo))
               todoAdd.mutate();
