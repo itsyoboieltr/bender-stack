@@ -101,7 +101,7 @@ Build for `production` by running the following command:
 bun run build
 ```
 
-## Running (work in progress)
+## Running
 
 Run in `production` by running the following command:
 

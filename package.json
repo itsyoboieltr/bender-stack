@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "expo start --clear --port 3000",
     "build": "expo export --platform web",
+    "start": "bun index.ts",
     "push": "drizzle-kit push:pg",
     "studio": "drizzle-kit studio"
   },
