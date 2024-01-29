@@ -24,7 +24,8 @@ const server = Bun.serve({
     }
     const request = new ExpoRequest(url.href, req);
     const response = await handleRequest(request);
-    return new Response(await response.text(), response as any); // The any is needed, otherwise it throws type error, but it still works
+    // The any is needed, otherwise it throws type error, but it still works
+    return new Response(await response.text(), response as any);
   },
 });
 
