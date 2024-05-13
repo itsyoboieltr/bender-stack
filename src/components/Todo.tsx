@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { Pressable, Text, View } from 'react-native';
 
-import { app } from '~/app/_layout';
-import { cn, handleEden } from '~/utils';
+import { api } from '~/app/_layout';
+import { cn } from '~/utils';
 
 interface TodoProps {
   id: string;
@@ -11,7 +11,7 @@ interface TodoProps {
 
 export default function Todo(props: TodoProps) {
   const todoDelete = useMutation({
-    mutationFn: async () => handleEden(await app.api.todo[props.id]!.delete()),
+    mutationFn: async () => await api.todo({ id: props.id }).delete(),
   });
   const todoDeletingDisabled = todoDelete.isPending;
   return (

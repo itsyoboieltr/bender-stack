@@ -1,4 +1,3 @@
-import type { EdenFetchError } from '@elysiajs/eden/src/errors';
 import {
   Errors,
   SetErrorFunction,
@@ -31,23 +30,3 @@ export const validate = <T extends TSchema>(
 ): boolean => {
   return Check(schema, value);
 };
-
-export function handleEden<T>(
-  response: (
-    | {
-        data: T;
-        error: null;
-      }
-    | {
-        data: null;
-        error: EdenFetchError<number, string>;
-      }
-  ) & {
-    status: number;
-    response: Response;
-    headers: Record<string, string>;
-  }
-): T {
-  if (response.error) throw response.error;
-  return response.data;
-}

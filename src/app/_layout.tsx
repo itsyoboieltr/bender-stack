@@ -1,5 +1,5 @@
 import '../global.css';
-import { edenTreaty } from '@elysiajs/eden';
+import { treaty } from '@elysiajs/eden';
 import {
   MutationCache,
   QueryClient,
@@ -12,11 +12,7 @@ import type { App } from '../server';
 
 import { clientEnv } from '~/utils/env/client';
 
-// Hermes is missing this feature
-// https://github.com/facebook/hermes/issues/948
-global.TextEncoder = require('text-encoding').TextEncoder;
-
-export const app = edenTreaty<App>(clientEnv.HOST_URL);
+export const { api } = treaty<App>(clientEnv.HOST_URL);
 
 export default function Layout() {
   const queryClient = new QueryClient({

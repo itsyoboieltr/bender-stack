@@ -3,22 +3,22 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
-import { app } from './_layout';
+import { api } from './_layout';
 import { todoInsertSchema } from '../server/todo/schema';
 
 import Todo from '~/components/Todo';
-import { cn, handleEden, validate } from '~/utils';
+import { cn, validate } from '~/utils';
 
 export default function App() {
   const [todo, setTodo] = useState(Create(todoInsertSchema));
 
   const todoQuery = useQuery({
     queryKey: ['todo'],
-    queryFn: async () => handleEden(await app.api.todo.get()),
+    queryFn: async () => (await api.todo.get()).data!,
   });
 
   const todoAdd = useMutation({
-    mutationFn: async () => handleEden(await app.api.todo.post(todo)),
+    mutationFn: async () => (await api.todo.post(todo)).data!,
     onSuccess: () => setTodo(Create(todoInsertSchema)),
   });
 

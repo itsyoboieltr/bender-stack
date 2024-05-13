@@ -5,7 +5,6 @@ const WebRequest = Request;
 const WebResponse = Response;
 
 const { createRequestHandler } = await import('@expo/server/build');
-const { ExpoRequest } = await import('@expo/server/build/environment');
 
 // Expo overrides the global Request and Response, so we need to override them back
 global.Request = WebRequest;
@@ -22,10 +21,7 @@ const server = Bun.serve({
       const file = Bun.file(`dist/client${url.pathname}`);
       return new Response(file);
     }
-    const request = new ExpoRequest(url.href, req);
-    const response = await handleRequest(request);
-    // The any is needed, otherwise it throws type error, but it still works
-    return new Response(await response.text(), response as any);
+    return await handleRequest(req);
   },
 });
 
