@@ -1,0 +1,43 @@
+services:
+  app:
+    image: bender/app:latest
+    restart: always
+    build:
+      context: .
+      args:
+        EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL:-http://localhost:3000}
+    depends_on:
+      - database
+    ports:
+      - ${PORT:-3000}:3000
+    environment:
+      DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-example}@database:5432/${DATABASE_NAME:-bender}
+
+  database:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-postgres}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-example}
+      POSTGRES_DB: ${DATABASE_NAME:-bender}
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  backup:
+    image: offen/docker-volume-backup:v2
+    restart: always
+    depends_on:
+      - database
+    environment:
+      BACKUP_LATEST_SYMLINK: backup-latest.tar.gz
+      BACKUP_CRON_EXPRESSION: 0 0 * * *
+      BACKUP_RETENTION_DAYS: 14
+    volumes:
+      - database:/backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DATABASE_BACKUP_PATH:-$HOME/backup}/${COMPOSE_PROJECT_NAME}:/archive
+    profiles:
+      - production
+
+volumes:
+  database:

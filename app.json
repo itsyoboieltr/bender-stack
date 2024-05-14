@@ -7,14 +7,7 @@
       "output": "server",
       "bundler": "metro"
     },
-    "plugins": [
-      [
-        "expo-router",
-        {
-          "origin": "https://n"
-        }
-      ]
-    ],
+    "plugins": ["expo-router"],
     "name": "bender-stack",
     "slug": "bender-stack"
   }
