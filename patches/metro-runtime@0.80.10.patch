@@ -1,0 +1,20 @@
+diff --git a/src/polyfills/require.js b/src/polyfills/require.js
+index 5cbacc00f4e04010c9f60cc3af471238e944c3ad..de5bb2ffde4e29ffdbbd4c6c83d80b2b54085f5a 100644
+--- a/src/polyfills/require.js
++++ b/src/polyfills/require.js
+@@ -92,14 +92,7 @@ function metroRequire(moduleId) {
+     : guardedLoadModule(moduleIdReallyIsNumber, module);
+ }
+ function shouldPrintRequireCycle(modules) {
+-  const regExps =
+-    global[__METRO_GLOBAL_PREFIX__ + "__requireCycleIgnorePatterns"];
+-  if (!Array.isArray(regExps)) {
+-    return true;
+-  }
+-  const isIgnored = (module) =>
+-    module != null && regExps.some((regExp) => regExp.test(module));
+-  return modules.every((module) => !isIgnored(module));
++  return false
+ }
+ function metroImportDefault(moduleId) {
+   if (__DEV__ && typeof moduleId === "string") {

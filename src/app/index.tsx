@@ -7,7 +7,8 @@ import { api } from './_layout';
 import { todoInsertSchema } from '../server/todo/schema';
 
 import Todo from '~/components/Todo';
-import { cn, validate } from '~/utils';
+import { app } from '~/server';
+import { cn } from '~/utils';
 
 export default function App() {
   const [todo, setTodo] = useState(Create(todoInsertSchema));
@@ -23,7 +24,7 @@ export default function App() {
   });
 
   const todoAddingDisabled =
-    todoAdd.isPending || !validate(todoInsertSchema, todo);
+    todoAdd.isPending || !app.models.todoInsert.safeParse(todo).success;
 
   return (
     <View className={'flex flex-col justify-center items-center gap-4 p-4'}>
@@ -41,7 +42,10 @@ export default function App() {
           onChangeText={(data) => setTodo({ data })}
           blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
           onSubmitEditing={() => {
-            if (!todoAdd.isPending && validate(todoInsertSchema, todo))
+            if (
+              !todoAdd.isPending &&
+              app.models.todoInsert.safeParse(todo).success
+            )
               todoAdd.mutate();
           }}
         />

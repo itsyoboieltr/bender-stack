@@ -1,14 +1,13 @@
-import { Type as t } from '@sinclair/typebox/type';
+import { Elysia, t } from 'elysia';
 
-import { parse } from '~/utils';
-
-const clientEnvSchema = t.Object({
-  HOST_URL: t.String({
-    minLength: 1,
-    error: 'EXPO_PUBLIC_HOST_URL client environment variable is not set!',
+const {
+  models: { clientSchema },
+} = new Elysia().model({
+  clientSchema: t.Object({
+    HOST_URL: t.String({ minLength: 1 }),
   }),
 });
 
-export const clientEnv = parse(clientEnvSchema, {
+export const clientEnv = clientSchema.parse({
   HOST_URL: process.env.EXPO_PUBLIC_HOST_URL ?? 'http://localhost:3000',
 });

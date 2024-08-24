@@ -1,14 +1,13 @@
-import { Type as t } from '@sinclair/typebox/type';
+import { Elysia, t } from 'elysia';
 
-import { parse } from '~/utils';
-
-const serverEnvSchema = t.Object({
-  DATABASE_URL: t.String({
-    minLength: 1,
-    error: 'DATABASE_URL server environment variable is not set!',
+const {
+  models: { serverSchema },
+} = new Elysia().model({
+  serverSchema: t.Object({
+    DATABASE_URL: t.String({ minLength: 1 }),
   }),
 });
 
-export const serverEnv = parse(serverEnvSchema, {
-  DATABASE_URL: process.env.DATABASE_URL,
+export const serverEnv = serverSchema.parse({
+  DATABASE_URL: process.env.DATABASE_URL ?? '',
 });
