@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index bb1d1b695d53b79c81468d661a670b37cdacf7b4..8b18880ac4075ae44e4b697c7de0b2baac6486ad 100644
+--- a/package.json
++++ b/package.json
+@@ -6,6 +6,7 @@
+   "react-native": "./dist/index.js",
+   "types": "./dist/index.d.ts",
+   "type": "module",
++  "main": "./dist/index.js",
+   "scripts": {
+     "build": "run-s clean && tsc",
+     "clean": "rimraf ./dist",

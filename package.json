@@ -53,6 +53,7 @@
   },
   "patchedDependencies": {
     "metro-runtime@0.80.10": "patches/metro-runtime@0.80.10.patch",
-    "@noble/hashes@1.4.0": "patches/@noble%2Fhashes@1.4.0.patch"
+    "@noble/hashes@1.4.0": "patches/@noble%2Fhashes@1.4.0.patch",
+    "layerr@3.0.0": "patches/layerr@3.0.0.patch"
   }
 }
