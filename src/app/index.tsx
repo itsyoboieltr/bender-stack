@@ -4,10 +4,9 @@ import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
 import { api } from './_layout';
-import { todoInsertSchema } from '../server/todo/schema';
+import { todoSchemas, todoInsertSchema } from '../server/todo/schema';
 
 import Todo from '~/components/Todo';
-import { app } from '~/server';
 import { cn } from '~/utils';
 
 export default function App() {
@@ -24,7 +23,7 @@ export default function App() {
   });
 
   const todoAddingDisabled =
-    todoAdd.isPending || !app.models.todoInsert.safeParse(todo).success;
+    todoAdd.isPending || !todoSchemas.insert.safeParse(todo).success;
 
   return (
     <View className={'flex flex-col justify-center items-center gap-4 p-4'}>
@@ -44,7 +43,7 @@ export default function App() {
           onSubmitEditing={() => {
             if (
               !todoAdd.isPending &&
-              app.models.todoInsert.safeParse(todo).success
+              todoSchemas.insert.safeParse(todo).success
             )
               todoAdd.mutate();
           }}
