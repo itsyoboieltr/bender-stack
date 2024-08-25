@@ -13,19 +13,11 @@ const serverEnvResult = serverSchema.safeParse({
 });
 
 if (!serverEnvResult.data) {
-  const errors = serverEnvResult.errors.reduce(
-    (previous, current) => {
-      const path = current.path.slice(1);
-      if (!previous[path])
-        previous[path] = current.summary.replaceAll('  ', ' ');
-      return previous;
-    },
-    {} as Record<string, string>
-  );
-  const message = Object.entries(errors)
-    .map((parts) => parts.join(': '))
-    .join('\n');
-  throw new Error('Invalid server environment variables!\n' + message);
+  const firstError = serverEnvResult.errors[0];
+  if (firstError)
+    throw new Error(
+      `Invalid server environment variable ${firstError.path.slice(1)}: ${firstError.summary.replaceAll('  ', ' ')}`
+    );
 }
 
 export const serverEnv = serverEnvResult.data;
