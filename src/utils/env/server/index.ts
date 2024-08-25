@@ -18,6 +18,7 @@ if (!serverEnvResult.data) {
     throw new Error(
       `Invalid server environment variable ${firstError.path.slice(1)}: ${firstError.summary.replaceAll('  ', ' ')}`
     );
+  else throw new Error(`Invalid server environment ${serverEnvResult.error}`);
 }
 
 export const serverEnv = serverEnvResult.data;

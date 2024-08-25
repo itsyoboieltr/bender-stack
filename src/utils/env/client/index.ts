@@ -18,6 +18,7 @@ if (!clientEnvResult.data) {
     throw new Error(
       `Invalid client environment variable ${firstError.path.slice(1)}: ${firstError.summary.replaceAll('  ', ' ')}`
     );
+  else throw new Error(`Invalid client environment ${clientEnvResult.error}`);
 }
 
 export const clientEnv = clientEnvResult.data;
