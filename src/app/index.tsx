@@ -3,11 +3,10 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
-import { api } from './_layout';
 import { todoSchemas, todoInsertSchema } from '../server/todo/schema';
 
 import Todo from '~/components/Todo';
-import { cn } from '~/utils';
+import { api, cn } from '~/utils';
 
 export default function App() {
   const [todo, setTodo] = useState(Create(todoInsertSchema));

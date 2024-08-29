@@ -3,22 +3,18 @@ import { Elysia, t } from 'elysia';
 const {
   models: { clientSchema },
 } = new Elysia().model({
-  clientSchema: t.Object({
-    HOST_URL: t.String({ minLength: 1 }),
-  }),
+  clientSchema: t.Object({}),
 });
 
-const clientEnvResult = clientSchema.safeParse({
-  HOST_URL: process.env.EXPO_PUBLIC_HOST_URL ?? 'http://localhost:3000',
-});
+const clientResult = clientSchema.safeParse({});
 
-if (!clientEnvResult.data) {
-  const firstError = clientEnvResult.errors[0];
+if (!clientResult.data) {
+  const firstError = clientResult.errors[0];
   if (firstError)
     throw new Error(
       `Invalid client environment variable ${firstError.path.slice(1)}: ${firstError.summary.replaceAll('  ', ' ')}`
     );
-  else throw new Error(`Invalid client environment ${clientEnvResult.error}`);
+  else throw new Error(`Invalid client environment ${clientResult.error}`);
 }
 
-export const clientEnv = clientEnvResult.data;
+export const client = clientResult.data;

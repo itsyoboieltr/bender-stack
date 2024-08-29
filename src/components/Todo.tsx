@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Pressable, Text, View } from 'react-native';
 
-import { api } from '~/app/_layout';
-import { cn } from '~/utils';
+import { cn, api } from '~/utils';
 
 interface TodoProps {
   id: string;
