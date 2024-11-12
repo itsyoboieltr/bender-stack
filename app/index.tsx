@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
 import Todo from '~/components/todo';
-/* import { todoInsertSchema } from '~/server/routers/todo/schema'; */
-import { trpc, cn /* , safeParse */ } from '~/utils';
+import { todoInsertSchema } from '~/server/routers/todo/schema';
+import { trpc, cn, createFromSchema } from '~/utils';
 
 export default function App() {
-  const [todo, setTodo] = useState({ data: '' });
+  const [todo, setTodo] = useState(createFromSchema(todoInsertSchema));
 
   const todoQuery = trpc.todo.get.useQuery();
 
   const todoAdd = trpc.todo.post.useMutation({
-    onSuccess: () => setTodo({ data: '' }),
+    onSuccess: () => setTodo(createFromSchema(todoInsertSchema)),
   });
 
   const todoAddingDisabled =
-    todoAdd.isPending; /* || !safeParse(todoInsertSchema, todo).success */
+    todoAdd.isPending || !todoInsertSchema.safeParse(todo).success;
 
   return (
     <View className={'flex flex-col justify-center items-center gap-4 p-4'}>

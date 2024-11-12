@@ -1,5 +1,8 @@
-import { Type as t } from '@sinclair/typebox';
+import { z } from 'zod';
 
-import { parse } from '~/utils';
-
-export const clientEnv = parse(t.Object({}), {});
+export const clientEnv = z
+  .object({ EXPO_PUBLIC_HOST_URL: z.string().min(1).trim() })
+  .parse({
+    EXPO_PUBLIC_HOST_URL:
+      process.env.EXPO_PUBLIC_HOST_URL ?? 'http://localhost:3000',
+  });

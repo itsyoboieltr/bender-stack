@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { trpc } from '~/utils';
+import { clientEnv } from '~/utils/env/client';
 
 export default function Layout() {
   const [queryClient] = useState(
@@ -31,7 +32,9 @@ export default function Layout() {
   );
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: new URL('api', window.location.href) })],
+      links: [
+        httpBatchLink({ url: new URL('api', clientEnv.EXPO_PUBLIC_HOST_URL) }),
+      ],
     })
   );
 
