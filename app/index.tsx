@@ -38,7 +38,7 @@ export default function App() {
         />
         <Pressable
           className={cn(
-            'rounded border-2 border-black bg-gray-300 px-4 flex flex-row items-center justify-center web:select-none',
+            'rounded border-2 border-black bg-gray-300 px-4 transition-all flex flex-row items-center justify-center web:select-none',
             {
               'bg-gray-400': todoAddingDisabled,
               'hover:bg-gray-400 active:bg-gray-500': !todoAddingDisabled,
@@ -49,7 +49,7 @@ export default function App() {
           <Text>Submit</Text>
         </Pressable>
       </View>
-      <Text>Bun + Elysia + NativeWind + Drizzle + Expo + React Native</Text>
+      <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
     </View>
   );
 }
