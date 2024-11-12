@@ -5,6 +5,7 @@ if (!process.env.DATABASE_URL)
 
 export default {
   dialect: 'postgresql',
-  schema: './src/server/schema.ts',
+  schema: './server/routers/schema.ts',
+  casing: 'snake_case',
   dbCredentials: { url: process.env.DATABASE_URL },
 } satisfies Config;

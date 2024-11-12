@@ -1,28 +1,21 @@
-import { Create } from '@sinclair/typebox/value';
-import { useQuery, useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 
-import { todoSchemas, todoInsertSchema } from '../server/todo/schema';
-
-import Todo from '~/components/Todo';
-import { api, cn } from '~/utils';
+import Todo from '~/components/todo';
+/* import { todoInsertSchema } from '~/server/routers/todo/schema'; */
+import { trpc, cn /* , safeParse */ } from '~/utils';
 
 export default function App() {
-  const [todo, setTodo] = useState(Create(todoInsertSchema));
+  const [todo, setTodo] = useState({ data: '' });
 
-  const todoQuery = useQuery({
-    queryKey: ['todo'],
-    queryFn: async () => (await api.todo.get()).data!,
-  });
+  const todoQuery = trpc.todo.get.useQuery();
 
-  const todoAdd = useMutation({
-    mutationFn: async () => (await api.todo.post(todo)).data!,
-    onSuccess: () => setTodo(Create(todoInsertSchema)),
+  const todoAdd = trpc.todo.post.useMutation({
+    onSuccess: () => setTodo({ data: '' }),
   });
 
   const todoAddingDisabled =
-    todoAdd.isPending || !todoSchemas.insert.safeParse(todo).success;
+    todoAdd.isPending; /* || !safeParse(todoInsertSchema, todo).success */
 
   return (
     <View className={'flex flex-col justify-center items-center gap-4 p-4'}>
@@ -40,11 +33,7 @@ export default function App() {
           onChangeText={(data) => setTodo({ data })}
           blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
           onSubmitEditing={() => {
-            if (
-              !todoAdd.isPending &&
-              todoSchemas.insert.safeParse(todo).success
-            )
-              todoAdd.mutate();
+            if (!todoAddingDisabled) todoAdd.mutate(todo);
           }}
         />
         <Pressable
@@ -56,7 +45,7 @@ export default function App() {
             }
           )}
           disabled={todoAddingDisabled}
-          onPress={() => todoAdd.mutate()}>
+          onPress={() => todoAdd.mutate(todo)}>
           <Text>Submit</Text>
         </Pressable>
       </View>

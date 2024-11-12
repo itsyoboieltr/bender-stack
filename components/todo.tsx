@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
 import { Pressable, Text, View } from 'react-native';
-
-import { cn, api } from '~/utils';
+import { cn, trpc } from 'utils';
 
 interface TodoProps {
   id: string;
@@ -9,9 +7,7 @@ interface TodoProps {
 }
 
 export default function Todo(props: TodoProps) {
-  const todoDelete = useMutation({
-    mutationFn: async () => await api.todo({ id: props.id }).delete(),
-  });
+  const todoDelete = trpc.todo.delete.useMutation();
   const todoDeletingDisabled = todoDelete.isPending;
   return (
     <View className={'flex flex-row justify-center items-center gap-4'}>
@@ -25,7 +21,7 @@ export default function Todo(props: TodoProps) {
           }
         )}
         disabled={todoDeletingDisabled}
-        onPress={() => todoDelete.mutate()}>
+        onPress={() => todoDelete.mutate({ id: props.id })}>
         <Text>X</Text>
       </Pressable>
     </View>
