@@ -2,6 +2,7 @@
   "expo": {
     "scheme": "acme",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "orientation": "default",
     "web": {
       "output": "server",
