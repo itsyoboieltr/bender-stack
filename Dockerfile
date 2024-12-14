@@ -1,4 +1,4 @@
-FROM imbios/bun-node:latest-iron-alpine
+FROM oven/bun:alpine
 
 ARG EXPO_PUBLIC_HOST_URL
 
