@@ -51,7 +51,9 @@ export default function Layout() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <StrictMode>
-          <SafeAreaView style={{ flex: 1 }} edges={['top', 'right', 'left']}>
+          <SafeAreaView
+            style={{ flex: 1, backgroundColor: 'white' }}
+            edges={['top', 'right', 'left']}>
             <Slot />
           </SafeAreaView>
         </StrictMode>

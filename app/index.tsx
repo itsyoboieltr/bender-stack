@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Platform, Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 
 import Todo from '~/components/todo';
 import { todoInsertSchema } from '~/server/routers/todo/schema';
@@ -31,7 +31,6 @@ export default function App() {
           }
           value={todo.data}
           onChangeText={(data) => setTodo({ data })}
-          blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
           onSubmitEditing={() => {
             if (!todoAddingDisabled) todoAdd.mutate(todo);
           }}

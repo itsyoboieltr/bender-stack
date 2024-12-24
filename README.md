@@ -9,7 +9,7 @@
 The `BENDER` 🤖 stack is a bun-based 🔥 `BLAZINGLY FAST` 🔥 full-stack `100% type-safe` native and web development solution that provides `everything` you need to build `production-ready` native and web apps. It consists of:
 
 - [Bun](https://bun.sh)
-- [Elysia](https://elysiajs.com)
+- [tRPC](https://trpc.io)
 - [NativeWind](https://www.nativewind.dev/)
 - [Drizzle](https://orm.drizzle.team)
 - [Expo](https://expo.dev/)
@@ -44,16 +44,16 @@ You can start the `development server` with:
 bun dev
 ```
 
-Unless you are running the development server and the app on the same device, you need to set the `EXPO_PUBLIC_HOST_URL` environment variable to the `public url` of your server. This is required for the app to do API calls, as your computer's `localhost` is not accessible from external devices (such as your phone), even if they are on the same network.
+Unless you are running the development server and the app on the same device, you need to set the `EXPO_PUBLIC_HOST_URL` environment variable to the `host url` of your server. This is required for the app to do API calls, as your computer's `localhost` is not accessible from external devices (such as your phone), even if they are on the same network.
 
 ```bash
 EXPO_PUBLIC_HOST_URL="..."
 ```
 
-One of the easiest ways to get a public url for your development server is by using [ngrok](https://ngrok.com/). After installing `ngrok`, you can start the development server and expose it to the internet with the following command:
+on macOS, you can get your local IP address by running:
 
 ```bash
-ngrok http 3000
+ipconfig getifaddr en0
 ```
 
 ## Building
