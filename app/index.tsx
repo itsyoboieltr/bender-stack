@@ -18,7 +18,7 @@ export default function App() {
     todoAdd.isPending || !todoInsertSchema.safeParse(todo).success;
 
   return (
-    <View className={'flex flex-col justify-center items-center gap-4 p-4'}>
+    <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <View className={'gap-2'}>
         {todoQuery.data?.map((todo) => (
           <Todo key={todo.id} id={todo.id} data={todo.data} />
@@ -38,7 +38,7 @@ export default function App() {
         />
         <Pressable
           className={cn(
-            'rounded border-2 border-black bg-gray-300 px-4 transition-all flex flex-row items-center justify-center web:select-none',
+            'flex flex-row items-center justify-center rounded border-2 border-black bg-gray-300 px-4 transition-all web:select-none',
             {
               'bg-gray-400': todoAddingDisabled,
               'hover:bg-gray-400 active:bg-gray-500': !todoAddingDisabled,

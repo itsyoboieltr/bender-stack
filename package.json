@@ -49,6 +49,7 @@
     "eslint-config-universe": "14.0.0",
     "eslint-plugin-drizzle": "^0.2.3",
     "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "0.6.9",
     "typescript": "^5.7.2"
   },
   "patchedDependencies": {
