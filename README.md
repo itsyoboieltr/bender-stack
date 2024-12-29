@@ -9,6 +9,7 @@
 The `BENDER` 🤖 stack is a bun-based 🔥 `BLAZINGLY FAST` 🔥 full-stack `100% type-safe` native and web development solution that provides `everything` you need to build `production-ready` native and web apps. It consists of:
 
 - [Bun](https://bun.sh)
+- [Better Auth](https://better-auth.com)
 - [tRPC](https://trpc.io)
 - [NativeWind](https://www.nativewind.dev/)
 - [Drizzle](https://orm.drizzle.team)
@@ -77,13 +78,7 @@ bun start
 In case your database schema does not match the schema defined by `drizzle`, then the database needs to be synchronized. This can be done by running the following command:
 
 ```bash
-bun push
-```
-
-In addition, `drizzle studio` can be used to connect to the database and browse, add, delete and update data based on the declared `drizzle schema`.
-
-```bash
-bun studio
+bun db:push
 ```
 
 ## Environment variables ([.env](.env.example))
@@ -91,6 +86,10 @@ bun studio
 - `PORT`: port that the application runs on.
 
 - `EXPO_PUBLIC_HOST_URL`: host URL for the application.
+
+- `BETTER_AUTH_SECRET`: Random value used by better-auth for encryption and generating hashes. Can be generated here: https://www.better-auth.com/docs/installation#set-environment-variables
+
+- `BETTER_AUTH_URL`: URL of the better-auth server, which is usually the same as the host url of the application.
 
 - `DATABASE_USER`: database user for Postgres.
 

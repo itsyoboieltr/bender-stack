@@ -12,6 +12,7 @@
         "project": "./tsconfig.json"
       },
       "rules": {
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-confusing-void-expression": "off",
         "react/jsx-curly-brace-presence": [

@@ -1,21 +1,40 @@
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Platform, Pressable, Text, TextInput, View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import Todo from '~/components/todo';
-import { todoInsertSchema } from '~/server/routers/todo/schema';
-import { trpc, cn, createFromSchema } from '~/utils';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Text } from '~/components/ui/text';
+import { trpc, auth } from '~/lib/utils';
+import {
+  createDefaultTodo,
+  todoInsertSchema,
+} from '~/server/routers/todo/schema';
 
 export default function App() {
-  const [todo, setTodo] = useState(createFromSchema(todoInsertSchema));
+  const utils = trpc.useUtils();
 
   const todoQuery = trpc.todo.get.useQuery();
 
+  const [todo, setTodo] = useState(createDefaultTodo());
+
   const todoAdd = trpc.todo.post.useMutation({
-    onSuccess: () => setTodo(createFromSchema(todoInsertSchema)),
+    onSuccess: async () => {
+      setTodo(createDefaultTodo());
+      await utils.todo.get.invalidate();
+    },
   });
 
   const todoAddingDisabled =
     todoAdd.isPending || !todoInsertSchema.safeParse(todo).success;
+
+  const signOut = useMutation({
+    mutationFn: async () => {
+      const response = await auth.signOut();
+      if (response.error) throw new Error(response.error.message);
+    },
+  });
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
@@ -25,10 +44,7 @@ export default function App() {
         ))}
       </View>
       <View className={'flex flex-row justify-center gap-4'}>
-        <TextInput
-          className={
-            'min-w-40 rounded border-2 border-black px-2 py-1 caret-black'
-          }
+        <Input
           value={todo.data}
           onChangeText={(data) => setTodo({ data })}
           blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
@@ -36,20 +52,17 @@ export default function App() {
             if (!todoAddingDisabled) todoAdd.mutate(todo);
           }}
         />
-        <Pressable
-          className={cn(
-            'flex flex-row items-center justify-center rounded border-2 border-black bg-gray-300 px-4 transition-all web:select-none',
-            {
-              'bg-gray-400': todoAddingDisabled,
-              'hover:bg-gray-400 active:bg-gray-500': !todoAddingDisabled,
-            }
-          )}
+        <Button
           disabled={todoAddingDisabled}
+          loading={todoAdd.isPending}
           onPress={() => todoAdd.mutate(todo)}>
           <Text>Submit</Text>
-        </Pressable>
+        </Button>
       </View>
       <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
+      <Button loading={signOut.isPending} onPress={() => signOut.mutate()}>
+        <Text>Sign out</Text>
+      </Button>
     </View>
   );
 }

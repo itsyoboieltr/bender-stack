@@ -1,15 +1,37 @@
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
+import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod';
+import { fromError } from 'zod-validation-error';
 
-export const { router, procedure } = initTRPC.create({
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
+import { auth } from './auth';
+
+export const createContext = async (opts: FetchCreateContextFnOptions) => {
+  const session = await auth.api.getSession({ headers: opts.req.headers });
+  return { auth: session };
+};
+
+export const { router, procedure, middleware } = initTRPC
+  .context<typeof createContext>()
+  .create({
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        message:
+          error.cause instanceof ZodError
+            ? fromError(error.cause).toString()
+            : error.message,
+      };
+    },
+  });
+
+const isAuthed = middleware(({ next, ctx }) => {
+  if (!ctx.auth) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'You are not authorized to access this resource',
+    });
+  }
+  return next({ ctx: { ...ctx, auth: ctx.auth } });
 });
+
+export const protectedProcedure = procedure.use(isAuthed);

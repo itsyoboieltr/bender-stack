@@ -1,5 +1,8 @@
-import { Pressable, Text, View } from 'react-native';
-import { cn, trpc } from 'utils';
+import { View } from 'react-native';
+
+import { Button } from '~/components/ui/button';
+import { Text } from '~/components/ui/text';
+import { trpc } from '~/lib/utils';
 
 interface TodoProps {
   id: string;
@@ -7,23 +10,27 @@ interface TodoProps {
 }
 
 export default function Todo(props: TodoProps) {
-  const todoDelete = trpc.todo.delete.useMutation();
+  const utils = trpc.useUtils();
+
+  const todoDelete = trpc.todo.delete.useMutation({
+    onSuccess: async () => {
+      await utils.todo.get.invalidate();
+    },
+  });
+
   const todoDeletingDisabled = todoDelete.isPending;
+
   return (
     <View className={'flex flex-row items-center justify-center gap-4'}>
       <Text>{props.data}</Text>
-      <Pressable
-        className={cn(
-          'flex flex-row items-center justify-center rounded border-2 border-black bg-red-300 px-4 py-1 transition-all web:select-none',
-          {
-            'bg-red-400': todoDeletingDisabled,
-            'hover:bg-red-400 active:bg-red-500': !todoDeletingDisabled,
-          }
-        )}
+      <Button
+        variant={'destructive'}
+        size={'sm'}
         disabled={todoDeletingDisabled}
+        loading={todoDelete.isPending}
         onPress={() => todoDelete.mutate({ id: props.id })}>
         <Text>X</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 }
