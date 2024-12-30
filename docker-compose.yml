@@ -12,6 +12,8 @@ services:
       - ${PORT:-3000}:3000
     environment:
       DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-example}@database:5432/${DATABASE_NAME:-bender}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-secret}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
 
   database:
     image: postgres:16-alpine
@@ -35,7 +37,7 @@ services:
     volumes:
       - database:/backup:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${DATABASE_BACKUP_PATH:-$HOME/backup}/${COMPOSE_PROJECT_NAME}:/archive
+      - ${DATABASE_BACKUP_PATH:-~/backup}/${COMPOSE_PROJECT_NAME}:/archive
     profiles:
       - production
 
