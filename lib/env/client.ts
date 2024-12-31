@@ -8,4 +8,6 @@ export const clientEnv = z
       .trim()
       .default('http://localhost:3000'),
   })
-  .parse({ EXPO_PUBLIC_HOST_URL: process.env.EXPO_PUBLIC_HOST_URL });
+  .parse({
+    EXPO_PUBLIC_HOST_URL: process.env.EXPO_PUBLIC_HOST_URL,
+  });

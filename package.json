@@ -8,12 +8,15 @@
     "start": "bun index.ts",
     "lint": "eslint --max-warnings=0 .",
     "format": "prettier --check .",
-    "auth:generate": "bunx @better-auth/cli generate --output server/routers/auth/table.ts",
     "db:push": "drizzle-kit push",
+    "auth:generate": "bunx @better-auth/cli generate --output server/routers/auth/table.ts",
+    "auth:secret": "bunx @better-auth/cli secret",
+    "email:dev": "cp .env ./node_modules/react-email/dist/preview && email dev --port 3001 --dir lib/emails",
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
   "dependencies": {
+    "@react-email/components": "0.0.31",
     "@react-native-async-storage/async-storage": "2.1.0",
     "@rn-primitives/label": "1.1.0",
     "@rn-primitives/slot": "1.1.0",
@@ -37,6 +40,7 @@
     "expo-status-bar": "~2.0.0",
     "lucide-react-native": "0.469.0",
     "nativewind": "4.1.23",
+    "nodemailer": "6.9.16",
     "postgres": "3.4.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -57,12 +61,14 @@
   "devDependencies": {
     "@babel/core": "7.26.0",
     "@types/bun": "1.1.14",
+    "@types/nodemailer": "6.4.17",
     "@types/react": "~18.3.16",
     "eslint": "8.56.0",
     "eslint-config-universe": "14.0.0",
     "eslint-plugin-drizzle": "0.2.3",
     "prettier": "3.4.2",
     "prettier-plugin-tailwindcss": "0.6.9",
+    "react-email": "3.0.4",
     "typescript": "5.7.2"
   },
   "patchedDependencies": {

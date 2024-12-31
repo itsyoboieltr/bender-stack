@@ -5,23 +5,27 @@ services:
     build:
       context: .
       args:
-        EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL:-http://localhost:3000}
+        EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL}
     depends_on:
       - database
     ports:
       - ${PORT:-3000}:3000
     environment:
-      DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-example}@database:5432/${DATABASE_NAME:-bender}
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-secret}
-      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      DATABASE_URL: ${DATABASE_URL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
 
   database:
     image: postgres:16-alpine
     restart: always
     environment:
-      POSTGRES_USER: ${DATABASE_USER:-postgres}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-example}
-      POSTGRES_DB: ${DATABASE_NAME:-bender}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - database:/var/lib/postgresql/data
 
@@ -37,7 +41,7 @@ services:
     volumes:
       - database:/backup:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${DATABASE_BACKUP_PATH:-~/backup}/${COMPOSE_PROJECT_NAME}:/archive
+      - ${DATABASE_BACKUP_PATH}/${COMPOSE_PROJECT_NAME}:/archive
     profiles:
       - production
 

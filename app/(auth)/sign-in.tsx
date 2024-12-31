@@ -65,6 +65,16 @@ export default function SignIn() {
           </Text>
         </Link>
       </View>
+      <View className={'flex flex-row items-center justify-center gap-1'}>
+        <Link href={'/forgot-password'} asChild>
+          <Text
+            className={
+              'text-gray-500 transition-all hover:text-gray-400 active:text-gray-500'
+            }>
+            Forgot password?
+          </Text>
+        </Link>
+      </View>
     </View>
   );
 }
