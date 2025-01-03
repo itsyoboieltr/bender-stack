@@ -55,11 +55,11 @@ export default function Layout() {
         },
         queryCache: new QueryCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: e.name, text2: e.message }),
+            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
         }),
         mutationCache: new MutationCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: e.name, text2: e.message }),
+            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
         }),
       })
   );

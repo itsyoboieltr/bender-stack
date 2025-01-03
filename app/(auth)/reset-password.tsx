@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -25,6 +26,12 @@ export default function ResetPassword() {
       if (response.error) throw new Error(response.error.message);
     },
     onSuccess: async () => {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2:
+          'Password reset successfully. You can now sign in with your new password.',
+      });
       router.push('/sign-in');
     },
   });
@@ -63,13 +70,12 @@ export default function ResetPassword() {
         <Text>Submit</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>Remember your password?</Text>
         <Link href={'/sign-in'} asChild>
           <Text
             className={
               'text-gray-500 transition-all hover:text-gray-400 active:text-gray-500'
             }>
-            Sign in
+            Back
           </Text>
         </Link>
       </View>

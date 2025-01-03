@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -15,12 +16,23 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function ForgotPassword() {
+  const router = useRouter();
+
   const [user, setUser] = useState(createDefaultUserForgotPassword());
 
   const forgetPassword = useMutation({
     mutationFn: async (user: UserForgotPassword) => {
       const response = await auth.forgetPassword(user);
       if (response.error) throw new Error(response.error.message);
+    },
+    onSuccess: async () => {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2:
+          'Check your mail! We’ve sent you an email with instructions to reset your password.',
+      });
+      router.push('/sign-in');
     },
   });
 
@@ -45,13 +57,12 @@ export default function ForgotPassword() {
         <Text>Submit</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>Remember your password?</Text>
         <Link href={'/sign-in'} asChild>
           <Text
             className={
               'text-gray-500 transition-all hover:text-gray-400 active:text-gray-500'
             }>
-            Sign in
+            Back
           </Text>
         </Link>
       </View>
