@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -22,14 +21,6 @@ export default function SignUp() {
     mutationFn: async (user: UserSignUp) => {
       const response = await auth.signUp.email(user);
       if (response.error) throw new Error(response.error.message);
-    },
-    onSuccess: async () => {
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2:
-          'Registration successful! Please check your mail to activate your account.',
-      });
     },
   });
 

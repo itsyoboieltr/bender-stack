@@ -1,5 +1,5 @@
 import { $ } from 'bun';
-import { count, eq, sql } from 'drizzle-orm';
+import { count, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 
 import { serverEnv } from './lib/env/server';
@@ -40,18 +40,32 @@ if (user?.count)
 
 console.log('🚨 No users found, creating a default admin user...');
 
-await auth.api.signUpEmail({
-  body: {
+const authContext = await auth.$context;
+
+const [adminUser] = await db
+  .insert(schema.user)
+  .values({
+    id: authContext.generateId({ model: 'user' }),
     name: 'Admin',
     email: 'admin@admin.com',
-    password: 'admin-password',
-  },
-});
+    emailVerified: true,
+    role: 'admin',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  })
+  .returning({ id: schema.user.id });
 
-await db
-  .update(schema.user)
-  .set({ role: 'admin' })
-  .where(eq(schema.user.email, 'admin@admin.com'));
+if (!adminUser) throw new Error('❌ Failed to create default admin user.');
+
+await db.insert(schema.account).values({
+  id: authContext.generateId({ model: 'account' }),
+  accountId: authContext.generateId({ model: 'account' }),
+  providerId: 'credential',
+  userId: adminUser.id,
+  password: await authContext.password.hash('admin-password'),
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
 
 console.log('✅ Default admin user successfully created!\n');
 console.log('❗ Please change password immediately after login!\n');

@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -22,16 +21,6 @@ export default function SignIn() {
     mutationFn: async (user: UserSignIn) => {
       const response = await auth.signIn.email(user);
       if (response.error) throw new Error(response.error.message);
-    },
-    onError: async (error) => {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2:
-          error.message === 'Email not verified'
-            ? 'Your email is not verified yet. We’ve sent you a new verification email. Please check your mail to activate your account.'
-            : error.message,
-      });
     },
   });
 

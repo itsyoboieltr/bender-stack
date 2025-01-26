@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { Link, useRouter } from 'expo-router';
+import { Link, Redirect, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -16,9 +16,14 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function ResetPassword() {
-  const router = useRouter();
+  const params = useLocalSearchParams();
+  const token = params.token
+    ? Array.isArray(params.token)
+      ? (params.token[0] ?? '')
+      : params.token
+    : '';
 
-  const [user, setUser] = useState(createDefaultUserResetPassword());
+  const [user, setUser] = useState(createDefaultUserResetPassword(token));
 
   const resetPassword = useMutation({
     mutationFn: async (user: UserResetPassword) => {
@@ -29,15 +34,15 @@ export default function ResetPassword() {
       Toast.show({
         type: 'success',
         text1: 'Success',
-        text2:
-          'Password reset successfully. You can now sign in with your new password.',
+        text2: 'Password reset successfully.',
       });
-      router.push('/sign-in');
     },
   });
 
   const resetPasswordDisabled =
     resetPassword.isPending || !userResetPasswordSchema.safeParse(user).success;
+
+  if (!user.token) return <Redirect href={'/sign-in'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
