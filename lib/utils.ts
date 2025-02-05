@@ -1,6 +1,6 @@
 import { Theme, DefaultTheme } from '@react-navigation/native';
 import { createTRPCReact } from '@trpc/react-query';
-import { adminClient } from 'better-auth/client/plugins';
+import { adminClient, emailOTPClient } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { clsx, type ClassValue } from 'clsx';
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
@@ -50,7 +50,7 @@ export const DARK_THEME: Theme = {
 
 export const auth = createAuthClient({
   baseURL: clientEnv.EXPO_PUBLIC_HOST_URL,
-  plugins: [adminClient()],
+  plugins: [adminClient(), emailOTPClient()],
 });
 
 export const trpc = createTRPCReact<AppRouter>();

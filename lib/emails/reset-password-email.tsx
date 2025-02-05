@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -9,37 +8,36 @@ import {
   Text,
   render,
 } from '@react-email/components';
-import type { BetterAuthOptions } from 'better-auth';
+import type { emailOTP } from 'better-auth/plugins';
 
-import { serverEnv } from '../env/server';
-
+import { serverEnv } from '~/lib/env/server';
+import { otp } from '~/lib/shared';
 import { transporter } from '~/server/email';
 
-type SendResetPassword = NonNullable<
-  NonNullable<BetterAuthOptions['emailAndPassword']>['sendResetPassword']
->;
+type SendVerificationOTP = Parameters<
+  typeof emailOTP
+>[0]['sendVerificationOTP'];
 
-export const sendResetPassword: SendResetPassword = async (data) => {
+export const sendResetPasswordEmail: SendVerificationOTP = async (data) => {
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
-    to: data.user.email,
+    to: data.email,
     subject: 'Reset your password',
     html: await render(<ResetPasswordEmail data={data} />),
   });
 };
 
 interface ResetPasswordEmailProps {
-  data: Parameters<SendResetPassword>[0];
+  data: Parameters<SendVerificationOTP>[0];
 }
 
 ResetPasswordEmail.PreviewProps = {
   data: {
-    user: {
-      name: 'John Doe',
-    },
-    url: 'https://example.com',
+    email: 'example@example.com',
+    otp: '123456',
+    type: 'forget-password',
   },
-} as ResetPasswordEmailProps;
+} satisfies ResetPasswordEmailProps;
 
 export default function ResetPasswordEmail(props: ResetPasswordEmailProps) {
   return (
@@ -49,17 +47,13 @@ export default function ResetPasswordEmail(props: ResetPasswordEmailProps) {
       <Body>
         <Container>
           <Heading style={heading}>Reset your password</Heading>
-          <Text style={{ ...text, marginBottom: '14px' }}>
-            Hey {props.data.user.name},
-          </Text>
           <Text style={text}>
             Someone recently requested a password change for your account. If
-            this was you, you can set a new password by clicking the button
-            below.
+            this was you, you can set a new password by entering the following
+            code when prompted. This code will expire in {otp.expiresIn / 60}{' '}
+            minutes.
           </Text>
-          <Button style={button} href={props.data.url}>
-            Reset
-          </Button>
+          <Text style={code}>{props.data.otp}</Text>
           <Text style={text}>
             If you do not want to change your password or did not request this,
             just ignore and delete this message.
@@ -84,13 +78,10 @@ const heading = {
   marginBottom: '15px',
 };
 
-const button = {
+const code = {
   ...text,
-  borderRadius: '3px',
-  fontWeight: '600',
-  fontSize: '15px',
-  textDecoration: 'none',
+  fontWeight: 'bold',
+  fontSize: '36px',
+  margin: '10px 0',
   textAlign: 'center' as const,
-  display: 'block',
-  padding: '11px 23px',
 };

@@ -21,23 +21,24 @@
     "@rn-primitives/label": "1.1.0",
     "@rn-primitives/slot": "1.1.0",
     "@rn-primitives/types": "1.1.0",
-    "@tanstack/react-query": "5.64.2",
+    "@tanstack/react-query": "5.66.0",
     "@trpc/client": "11.0.0-rc.666",
     "@trpc/react-query": "11.0.0-rc.666",
     "@trpc/server": "11.0.0-rc.666",
-    "better-auth": "1.1.14",
+    "better-auth": "1.1.15",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "drizzle-kit": "0.30.2",
-    "drizzle-orm": "0.38.4",
-    "drizzle-zod": "0.6.1",
-    "expo": "~52.0.26",
-    "expo-constants": "~17.0.4",
-    "expo-dev-client": "~5.0.10",
-    "expo-linking": "~7.0.4",
+    "drizzle-kit": "0.30.4",
+    "drizzle-orm": "0.39.1",
+    "drizzle-zod": "0.7.0",
+    "expo": "~52.0.28",
+    "expo-constants": "~17.0.5",
+    "expo-dev-client": "~5.0.11",
+    "expo-linking": "~7.0.5",
     "expo-router": "~4.0.17",
     "expo-splash-screen": "~0.29.21",
     "expo-status-bar": "~2.0.1",
+    "input-otp-native": "0.4.0",
     "lucide-react-native": "0.474.0",
     "nativewind": "4.1.23",
     "nodemailer": "6.10.0",
@@ -60,9 +61,9 @@
     "zod-validation-error": "3.4.0"
   },
   "devDependencies": {
-    "@better-auth/cli": "1.1.14",
-    "@babel/core": "7.26.0",
-    "@types/bun": "1.2.0",
+    "@better-auth/cli": "1.1.15",
+    "@babel/core": "7.26.7",
+    "@types/bun": "1.2.2",
     "@types/nodemailer": "6.4.17",
     "@types/react": "~18.3.16",
     "eslint": "8.56.0",
@@ -79,6 +80,9 @@
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
+        "exclude": [
+          "lucide-react-native"
+        ],
         "listUnknownPackages": false
       }
     }

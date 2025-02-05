@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -9,37 +8,36 @@ import {
   Text,
   render,
 } from '@react-email/components';
-import type { BetterAuthOptions } from 'better-auth';
+import type { emailOTP } from 'better-auth/plugins';
 
-import { serverEnv } from '../env/server';
-
+import { serverEnv } from '~/lib/env/server';
+import { otp } from '~/lib/shared';
 import { transporter } from '~/server/email';
 
-type SendVerificationEmail = NonNullable<
-  NonNullable<BetterAuthOptions['emailVerification']>['sendVerificationEmail']
->;
+type SendVerificationOTP = Parameters<
+  typeof emailOTP
+>[0]['sendVerificationOTP'];
 
-export const sendVerificationEmail: SendVerificationEmail = async (data) => {
+export const sendVerificationEmail: SendVerificationOTP = async (data) => {
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
-    to: data.user.email,
+    to: data.email,
     subject: 'Verify your email address',
     html: await render(<VerificationEmail data={data} />),
   });
 };
 
 interface VerificationEmailProps {
-  data: Parameters<SendVerificationEmail>[0];
+  data: Parameters<SendVerificationOTP>[0];
 }
 
 VerificationEmail.PreviewProps = {
   data: {
-    user: {
-      name: 'John Doe',
-    },
-    url: 'https://example.com',
+    email: 'example@example.com',
+    otp: '123456',
+    type: 'email-verification',
   },
-} as VerificationEmailProps;
+} satisfies VerificationEmailProps;
 
 export default function VerificationEmail(props: VerificationEmailProps) {
   return (
@@ -49,17 +47,12 @@ export default function VerificationEmail(props: VerificationEmailProps) {
       <Body>
         <Container>
           <Heading style={heading}>Verify your email address</Heading>
-          <Text style={{ ...text, marginBottom: '14px' }}>
-            Hey {props.data.user.name},
-          </Text>
           <Text style={text}>
-            We want to make sure it is really you. Please verify your email
-            address by clicking the button below. Once you confirm, you will be
-            redirected to the application.
+            We want to make sure it's really you. Please enter the following
+            code when prompted. This code will expire in {otp.expiresIn / 60}{' '}
+            minutes.
           </Text>
-          <Button style={button} href={props.data.url}>
-            Verify
-          </Button>
+          <Text style={code}>{props.data.otp}</Text>
           <Text style={text}>
             If you do not want to verify your email or did not request this,
             just ignore and delete this message.
@@ -84,13 +77,10 @@ const heading = {
   marginBottom: '15px',
 };
 
-const button = {
+const code = {
   ...text,
-  borderRadius: '3px',
-  fontWeight: '600',
-  fontSize: '15px',
-  textDecoration: 'none',
+  fontWeight: 'bold',
+  fontSize: '36px',
+  margin: '10px 0',
   textAlign: 'center' as const,
-  display: 'block',
-  padding: '11px 23px',
 };

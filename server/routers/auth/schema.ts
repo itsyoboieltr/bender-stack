@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+import { minPasswordLength, otp } from '~/lib/shared';
+
 export const userSignInSchema = z.object({
   email: z.string().trim().min(1).email(),
-  password: z.string().trim().min(8),
+  password: z.string().trim().min(minPasswordLength),
 });
 
 export type UserSignIn = z.infer<typeof userSignInSchema>;
@@ -15,7 +17,7 @@ export const createDefaultUserSignIn = (): UserSignIn => ({
 export const userSignUpSchema = z.object({
   name: z.string().trim().min(1),
   email: z.string().trim().min(1).email(),
-  password: z.string().trim().min(8),
+  password: z.string().trim().min(minPasswordLength),
 });
 
 export type UserSignUp = z.infer<typeof userSignUpSchema>;
@@ -28,33 +30,27 @@ export const createDefaultUserSignUp = (): UserSignUp => ({
 
 export const userForgotPasswordSchema = z.object({
   email: z.string().trim().min(1).email(),
-  redirectTo: z.literal('/reset-password'),
-});
-
-export type UserForgotPassword = z.infer<typeof userForgotPasswordSchema>;
-
-export const createDefaultUserForgotPassword = (): UserForgotPassword => ({
-  email: '',
-  redirectTo: '/reset-password',
 });
 
 export const userResetPasswordSchema = z
   .object({
-    newPassword: z.string().trim().min(8),
-    newPasswordConfirm: z.string().trim().min(8),
-    token: z.string().trim().min(1),
+    step: z.union([z.literal('email'), z.literal('otp'), z.literal('reset')]),
+    email: z.string().trim().min(1).email(),
+    otp: z.string().trim().length(otp.otpLength),
+    password: z.string().trim().min(minPasswordLength),
+    passwordConfirm: z.string().trim().min(minPasswordLength),
   })
-  .refine((data) => data.newPassword === data.newPasswordConfirm, {
+  .refine((data) => data.password === data.passwordConfirm, {
     message: 'Passwords must match',
-    path: ['newPasswordConfirm'],
+    path: ['passwordConfirm'],
   });
 
 export type UserResetPassword = z.infer<typeof userResetPasswordSchema>;
 
-export const createDefaultUserResetPassword = (
-  token: string
-): UserResetPassword => ({
-  newPassword: '',
-  newPasswordConfirm: '',
-  token,
+export const createDefaultUserResetPassword = (): UserResetPassword => ({
+  step: 'email',
+  email: '',
+  otp: '',
+  password: '',
+  passwordConfirm: '',
 });

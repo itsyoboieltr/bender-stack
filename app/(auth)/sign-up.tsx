@@ -66,7 +66,7 @@ export default function SignUp() {
         <Link href={'/sign-in'} asChild>
           <Text
             className={
-              'text-gray-500 transition-all hover:text-gray-400 active:text-gray-500'
+              'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
             Sign in
           </Text>
