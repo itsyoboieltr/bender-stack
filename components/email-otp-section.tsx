@@ -9,12 +9,12 @@ import { Text } from './ui/text';
 import { rateLimit } from '~/lib/shared';
 import { formatTime, auth, setTimer } from '~/lib/utils';
 
-interface OTPSectionProps {
+interface EmailOTPSectionProps {
   data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0];
   onComplete: (otp: string) => void;
 }
 
-export default function EmailOTPSection(props: OTPSectionProps) {
+export default function EmailOTPSection(props: EmailOTPSectionProps) {
   const timer = useTimer({ expiryTimestamp: new Date() });
 
   const sendVerificationOtp = useMutation({
