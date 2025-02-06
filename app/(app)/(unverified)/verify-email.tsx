@@ -21,6 +21,13 @@ export default function VerifyEmail() {
     },
   });
 
+  const signOut = useMutation({
+    mutationFn: async () => {
+      const response = await auth.signOut();
+      if (response.error) throw new Error(response.error.message);
+    },
+  });
+
   if (!session.data) return null;
 
   return (
@@ -33,6 +40,15 @@ export default function VerifyEmail() {
           verifyEmail.mutate({ email: session.data.user.email, otp });
         }}
       />
+      <View className={'flex flex-row items-center justify-center gap-1'}>
+        <Text
+          className={
+            'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
+          }
+          onPress={() => signOut.mutate()}>
+          Back
+        </Text>
+      </View>
     </View>
   );
 }
