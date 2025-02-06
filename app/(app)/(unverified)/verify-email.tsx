@@ -15,10 +15,7 @@ export default function VerifyEmail() {
       const response = await auth.emailOtp.verifyEmail(data);
       if (response.error) throw new Error(response.error.message);
     },
-    onSuccess: () => {
-      // needed to refresh the session with the new user status
-      location.reload();
-    },
+    onSuccess: () => session.refetch(),
   });
 
   const signOut = useMutation({
