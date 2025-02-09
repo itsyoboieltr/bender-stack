@@ -54,3 +54,21 @@ export const createDefaultUserResetPassword = (): UserResetPassword => ({
   password: '',
   passwordConfirm: '',
 });
+
+export const userEnableTwoFactorSchema = z.object({
+  step: z.union([
+    z.literal('password'),
+    z.literal('scan'),
+    z.literal('verify'),
+  ]),
+  password: z.string().trim().min(minPasswordLength),
+  totpURI: z.string().trim(),
+});
+
+export type UserEnableTwoFactor = z.infer<typeof userEnableTwoFactorSchema>;
+
+export const createDefaultUserEnableTwoFactor = (): UserEnableTwoFactor => ({
+  step: 'password',
+  password: '',
+  totpURI: '',
+});

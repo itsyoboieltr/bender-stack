@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -21,11 +21,22 @@ export default function SignUp() {
     mutationFn: async (user: UserSignUp) => {
       const response = await auth.signUp.email(user);
       if (response.error) throw new Error(response.error.message);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      await auth.emailOtp.sendVerificationOtp({
+        email: data.user.email,
+        type: 'email-verification',
+      });
     },
   });
 
   const signUpDisabled =
     signUp.isPending || !userSignUpSchema.safeParse(user).success;
+
+  const session = auth.useSession();
+  if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
+  if (session.data) return <Redirect href={'/'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>

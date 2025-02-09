@@ -1,8 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { type UseMutationResult, useMutation } from '@tanstack/react-query';
+import { Link, Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
+import TwoFactorTOTP from '~/components/two-factor-totp';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
@@ -15,17 +16,61 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function SignIn() {
-  const [user, setUser] = useState(createDefaultUserSignIn());
-
+  const router = useRouter();
   const signIn = useMutation({
-    mutationFn: async (user: UserSignIn) => {
-      const response = await auth.signIn.email(user);
+    mutationFn: async (data: UserSignIn) => {
+      const response = await auth.signIn.email(data);
       if (response.error) throw new Error(response.error.message);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      // when 2FA is enabled, data.user is not returned, so we need to check this
+      if (data.user) {
+        // send a new verification otp if the user tries to log in and is not verified
+        if (!data.user.emailVerified) {
+          await auth.emailOtp.sendVerificationOtp({
+            email: data.user.email,
+            type: 'email-verification',
+          });
+          router.replace('/verify-email');
+        } else {
+          // if data.user is returned and the email is verified, 2FA is disabled
+          router.replace('/enable-two-factor');
+        }
+      }
     },
   });
 
+  const session = auth.useSession();
+  if (session.data) return <Redirect href={'/'} />;
+
+  return (
+    <>
+      {signIn.status !== 'success' ? (
+        <SignInEmailAndPasswordStep signIn={signIn} session={session} />
+      ) : (
+        <SignInTwoFactorStep signIn={signIn} session={session} />
+      )}
+    </>
+  );
+}
+
+interface SignInStepProps {
+  signIn: UseMutationResult<
+    ReturnType<typeof auth.signIn.email>,
+    Error,
+    UserSignIn
+  >;
+  session: ReturnType<typeof auth.useSession>;
+}
+
+function SignInEmailAndPasswordStep(props: SignInStepProps) {
+  const [user, setUser] = useState(createDefaultUserSignIn());
+
   const signInDisabled =
-    signIn.isPending || !userSignInSchema.safeParse(user).success;
+    props.signIn.isPending || !userSignInSchema.safeParse(user).success;
+
+  if (props.session.isPending) return <ActivityIndicator className={'mt-10'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
@@ -43,15 +88,15 @@ export default function SignIn() {
           value={user.password}
           onChangeText={(password) => setUser({ ...user, password })}
           onSubmitEditing={() => {
-            if (!signInDisabled) signIn.mutate(user);
+            if (!signInDisabled) props.signIn.mutate(user);
           }}
           secureTextEntry
         />
       </View>
       <Button
         disabled={signInDisabled}
-        loading={signIn.isPending}
-        onPress={() => signIn.mutate(user)}>
+        loading={props.signIn.isPending}
+        onPress={() => props.signIn.mutate(user)}>
         <Text>Sign in</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
@@ -74,6 +119,33 @@ export default function SignIn() {
             Forgot password?
           </Text>
         </Link>
+      </View>
+    </View>
+  );
+}
+
+function SignInTwoFactorStep(props: SignInStepProps) {
+  const verifyTotp = useMutation({
+    mutationFn: async (
+      data: Parameters<typeof auth.twoFactor.verifyTotp>[0]
+    ) => {
+      const response = await auth.twoFactor.verifyTotp(data);
+      if (response.error) throw new Error(response.error.message);
+    },
+  });
+
+  return (
+    <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
+      <Text className={'font-semibold'}>Sign in</Text>
+      <TwoFactorTOTP onComplete={(code) => verifyTotp.mutate({ code })} />
+      <View className={'flex flex-row items-center justify-center gap-1'}>
+        <Text
+          className={
+            'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
+          }
+          onPress={() => props.signIn.reset()}>
+          Back
+        </Text>
       </View>
     </View>
   );

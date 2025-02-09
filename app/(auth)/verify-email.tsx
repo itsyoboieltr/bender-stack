@@ -1,13 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import { View } from 'react-native';
+import { Redirect } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
-import EmailOTPSection from '~/components/email-otp-section';
+import EmailOTPSection from '~/components/email-otp';
 import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 
 export default function VerifyEmail() {
-  const session = auth.useSession();
-
   const verifyEmail = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.verifyEmail>[0]
@@ -15,7 +14,11 @@ export default function VerifyEmail() {
       const response = await auth.emailOtp.verifyEmail(data);
       if (response.error) throw new Error(response.error.message);
     },
-    onSuccess: () => session.refetch(),
+    onSuccess: () => {
+      // refetch session on email verification
+      // workaround for: https://github.com/better-auth/better-auth/issues/1286
+      session.refetch();
+    },
   });
 
   const signOut = useMutation({
@@ -25,13 +28,15 @@ export default function VerifyEmail() {
     },
   });
 
-  if (!session.data) return null;
+  const session = auth.useSession();
+  if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
+  if (!session.data) return <Redirect href={'/sign-in'} />;
+  if (session.data.user.emailVerified) return <Redirect href={'/'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>Verify your email address</Text>
       <EmailOTPSection
-        data={{ email: session.data.user.email, type: 'email-verification' }}
         onComplete={(otp) => {
           if (!session.data) return;
           verifyEmail.mutate({ email: session.data.user.email, otp });

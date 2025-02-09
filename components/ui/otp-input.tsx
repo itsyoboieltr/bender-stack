@@ -1,14 +1,12 @@
 import { OTPInput as InputOTP, type OTPInputProps } from 'input-otp-native';
 import { View, Text } from 'react-native';
 
-import { otp } from '~/lib/shared';
 import { cn } from '~/lib/utils';
 
-const OTPInput = (props: Partial<OTPInputProps>) => {
+const OTPInput = (props: OTPInputProps) => {
   return (
     <InputOTP
       {...props}
-      maxLength={otp.otpLength}
       autoComplete={'one-time-code'}
       keyboardType={'numeric'}
       inputMode={'numeric'}

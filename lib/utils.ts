@@ -1,10 +1,13 @@
 import { Theme, DefaultTheme } from '@react-navigation/native';
 import { createTRPCReact } from '@trpc/react-query';
-import { adminClient, emailOTPClient } from 'better-auth/client/plugins';
+import {
+  adminClient,
+  emailOTPClient,
+  twoFactorClient,
+} from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { clsx, type ClassValue } from 'clsx';
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
-import type { TimerResult } from 'react-timer-hook';
 import { twMerge } from 'tailwind-merge';
 
 import { clientEnv } from '~/lib/env/client';
@@ -50,25 +53,7 @@ export const DARK_THEME: Theme = {
 
 export const auth = createAuthClient({
   baseURL: clientEnv.EXPO_PUBLIC_HOST_URL,
-  plugins: [adminClient(), emailOTPClient()],
+  plugins: [adminClient(), emailOTPClient(), twoFactorClient()],
 });
 
 export const trpc = createTRPCReact<AppRouter>();
-
-export const setTimer = ({
-  timer,
-  seconds,
-}: {
-  timer: TimerResult;
-  seconds: number;
-}) => {
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + seconds);
-  timer.restart(time);
-};
-
-export const formatTime = (minutes: number, seconds: number) => {
-  const paddedMinutes = minutes.toString().padStart(2, '0');
-  const paddedSeconds = seconds.toString().padStart(2, '0');
-  return `${paddedMinutes}:${paddedSeconds}`;
-};

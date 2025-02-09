@@ -12,6 +12,7 @@ export const user = pgTable('user', {
   banned: boolean(),
   banReason: text(),
   banExpires: timestamp(),
+  twoFactorEnabled: boolean(),
 });
 
 export const session = pgTable('session', {
@@ -53,4 +54,13 @@ export const verification = pgTable('verification', {
   expiresAt: timestamp().notNull(),
   createdAt: timestamp(),
   updatedAt: timestamp(),
+});
+
+export const twoFactor = pgTable('two_factor', {
+  id: text().primaryKey(),
+  secret: text().notNull(),
+  backupCodes: text().notNull(),
+  userId: text()
+    .notNull()
+    .references(() => user.id),
 });

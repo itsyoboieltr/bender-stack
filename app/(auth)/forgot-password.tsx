@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { Link, Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
-import EmailOTPSection from '~/components/email-otp-section';
+import EmailOTP from '~/components/email-otp';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
@@ -19,6 +20,10 @@ import {
 export default function ForgotPassword() {
   const [user, setUser] = useState(createDefaultUserResetPassword());
 
+  const session = auth.useSession();
+  if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
+  if (session.data) return <Redirect href={'/'} />;
+
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>Forgot password</Text>
@@ -33,12 +38,22 @@ export default function ForgotPassword() {
   );
 }
 
-interface ForgotPasswordEmailStepProps {
+interface ForgotPasswordStepProps {
   user: UserResetPassword;
   setUser: (user: UserResetPassword) => void;
 }
 
-function ForgotPasswordEmailStep(props: ForgotPasswordEmailStepProps) {
+function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
+  const sendVerificationOtp = useMutation({
+    mutationFn: async (
+      data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0]
+    ) => {
+      const response = await auth.emailOtp.sendVerificationOtp(data);
+      if (response.error) throw new Error(response.error.message);
+    },
+    onSuccess: () => props.setUser({ ...props.user, step: 'otp' }),
+  });
+
   const disabled = !userForgotPasswordSchema.safeParse(props.user).success;
 
   return (
@@ -49,13 +64,23 @@ function ForgotPasswordEmailStep(props: ForgotPasswordEmailStepProps) {
           value={props.user.email}
           onChangeText={(email) => props.setUser({ ...props.user, email })}
           onSubmitEditing={() => {
-            if (!disabled) props.setUser({ ...props.user, step: 'otp' });
+            if (!disabled)
+              sendVerificationOtp.mutate({
+                email: props.user.email,
+                type: 'forget-password',
+              });
           }}
         />
       </View>
       <Button
         disabled={disabled}
-        onPress={() => props.setUser({ ...props.user, step: 'otp' })}>
+        loading={sendVerificationOtp.isPending}
+        onPress={() =>
+          sendVerificationOtp.mutate({
+            email: props.user.email,
+            type: 'forget-password',
+          })
+        }>
         <Text>Continue</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
@@ -72,16 +97,10 @@ function ForgotPasswordEmailStep(props: ForgotPasswordEmailStepProps) {
   );
 }
 
-interface ForgotPasswordOTPStepProps {
-  user: UserResetPassword;
-  setUser: (user: UserResetPassword) => void;
-}
-
-function ForgotPasswordOTPStep(props: ForgotPasswordOTPStepProps) {
+function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
   return (
     <>
-      <EmailOTPSection
-        data={{ email: props.user.email, type: 'forget-password' }}
+      <EmailOTP
         onComplete={(otp) =>
           props.setUser({ ...props.user, step: 'reset', otp })
         }
@@ -99,12 +118,8 @@ function ForgotPasswordOTPStep(props: ForgotPasswordOTPStepProps) {
   );
 }
 
-interface ForgotPasswordResetStepProps {
-  user: UserResetPassword;
-  setUser: (user: UserResetPassword) => void;
-}
-
-function ForgotPasswordResetStep(props: ForgotPasswordResetStepProps) {
+function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
+  const router = useRouter();
   const resetPassword = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.resetPassword>[0]
@@ -112,9 +127,13 @@ function ForgotPasswordResetStep(props: ForgotPasswordResetStepProps) {
       const response = await auth.emailOtp.resetPassword(data);
       if (response.error) throw new Error(response.error.message);
     },
-    onSuccess: async (_, data) => {
-      const response = await auth.signIn.email(data);
-      if (response.error) throw new Error(response.error.message);
+    onSuccess: () => {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Your password was successfully reset',
+      });
+      router.replace('/sign-in');
     },
   });
 

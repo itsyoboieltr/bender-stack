@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { Redirect } from 'expo-router';
 import { useState } from 'react';
-import { Platform, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 
 import Todo from '~/components/todo';
 import { Button } from '~/components/ui/button';
@@ -35,6 +36,14 @@ export default function App() {
       if (response.error) throw new Error(response.error.message);
     },
   });
+
+  const session = auth.useSession();
+  if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
+  if (!session.data) return <Redirect href={'/sign-in'} />;
+  if (!session.data.user.emailVerified)
+    return <Redirect href={'/verify-email'} />;
+  if (!session.data.user.twoFactorEnabled)
+    return <Redirect href={'/enable-two-factor'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
