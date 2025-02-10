@@ -20,6 +20,7 @@
         "drizzle-orm": "0.39.1",
         "drizzle-zod": "0.7.0",
         "expo": "~52.0.28",
+        "expo-clipboard": "~7.0.1",
         "expo-constants": "~17.0.5",
         "expo-dev-client": "~5.0.11",
         "expo-linking": "~7.0.5",
@@ -1236,6 +1237,8 @@
     "expo": ["expo@52.0.28", "", { "dependencies": { "@babel/runtime": "^7.20.0", "@expo/cli": "0.22.11", "@expo/config": "~10.0.8", "@expo/config-plugins": "~9.0.14", "@expo/fingerprint": "0.11.7", "@expo/metro-config": "0.19.9", "@expo/vector-icons": "^14.0.0", "babel-preset-expo": "~12.0.6", "expo-asset": "~11.0.2", "expo-constants": "~17.0.5", "expo-file-system": "~18.0.7", "expo-font": "~13.0.3", "expo-keep-awake": "~14.0.2", "expo-modules-autolinking": "2.0.7", "expo-modules-core": "2.2.0", "fbemitter": "^3.0.0", "web-streams-polyfill": "^3.3.2", "whatwg-url-without-unicode": "8.0.0-3" }, "peerDependencies": { "@expo/dom-webview": "*", "@expo/metro-runtime": "*", "react": "*", "react-native": "*", "react-native-webview": "*" }, "optionalPeers": ["@expo/dom-webview", "@expo/metro-runtime", "react-native-webview"], "bin": { "expo": "bin/cli" } }, "sha512-0O/JEYYCFszJ85frislm79YmlrQA5ghAQXV4dqcQcsy9FqftdicD4p/ehT36yiuGIhaKC6fn25LEaJ9JR2ei7g=="],
 
     "expo-asset": ["expo-asset@11.0.2", "", { "dependencies": { "@expo/image-utils": "^0.6.4", "expo-constants": "~17.0.4", "invariant": "^2.2.4", "md5-file": "^3.2.3" }, "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" } }, "sha512-We3Td5WsNsNQyXoheLnuwic6JCOt/pqXqIIyWaZ3z/PeHrA+SwoQdI18MjDhkudLK08tbIVyDSUW8IJHXa04eg=="],
+
+    "expo-clipboard": ["expo-clipboard@7.0.1", "", { "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" } }, "sha512-rqYk0+WoqitPcPKxmMxSpLonX1E5Ije3LBYfnYMbH3xU5Gr8EAH9QnOWOi4BgahUPvcot6nbFEnx+DqARrmxKQ=="],
 
     "expo-constants": ["expo-constants@17.0.5", "", { "dependencies": { "@expo/config": "~10.0.8", "@expo/env": "~0.4.1" }, "peerDependencies": { "expo": "*", "react-native": "*" } }, "sha512-6SHXh32jCB+vrp2TRDNkoGoM421eOBPZIXX9ixI0hKKz71tIjD+LMr/P+rGUd/ks312MP3WK3j5vcYYPkCD8tQ=="],
 

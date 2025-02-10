@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import * as Clipboard from 'expo-clipboard';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -9,7 +10,7 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
-import { auth } from '~/lib/utils';
+import { auth, cn } from '~/lib/utils';
 import {
   userEnableTwoFactorSchema,
   type UserEnableTwoFactor,
@@ -103,6 +104,17 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
 }
 
 function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
+  const copyToClipboard = useMutation({
+    mutationFn: async (data: string) => {
+      await Clipboard.setStringAsync(data);
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        copyToClipboard.reset();
+      }, 1500);
+    },
+  });
+
   return (
     <>
       <Text className={'text-center'}>
@@ -110,6 +122,25 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
         authentication on your device.
       </Text>
       <QRCode value={props.user.totpURI} />
+      <Button
+        variant={'ghost'}
+        disabled={copyToClipboard.status === 'success'}
+        onPress={() => copyToClipboard.mutate(props.user.totpURI)}>
+        <View className={'relative flex items-center justify-center'}>
+          <Text
+            className={cn('transition-opacity', {
+              'opacity-0': copyToClipboard.status === 'success',
+            })}>
+            Copy setup key
+          </Text>
+          <Text
+            className={cn('absolute text-lg opacity-0 transition-opacity', {
+              'opacity-100': copyToClipboard.status === 'success',
+            })}>
+            ✓
+          </Text>
+        </View>
+      </Button>
       <Text className={'text-center'}>
         Once it’s all set up, click the button below to verify that everything
         works.
