@@ -40,7 +40,7 @@ export const auth = betterAuth({
       totpOptions: { ...totp },
     }),
   ],
-  advanced: { generateId: () => ulid() },
+  advanced: { database: { generateId: () => ulid() } },
   emailAndPassword: { enabled: true, minPasswordLength },
   rateLimit: {
     window: 60, // time window in seconds
@@ -58,7 +58,7 @@ export const auth = betterAuth({
       // invalidate the cookie cache on email verification
       // workaround for: https://github.com/better-auth/better-auth/issues/1286
       if (ctx.path.startsWith('/email-otp/verify-email')) {
-        ctx.setCookie('better-auth.session_data', '');
+        ctx.setCookie('better-auth.session_data', '', { path: '/' });
       }
     }),
   },

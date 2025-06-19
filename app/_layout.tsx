@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { httpBatchLink } from '@trpc/client';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { SplashScreen, Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { StrictMode, useEffect, useState } from 'react';
@@ -20,7 +20,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 import { clientEnv } from '~/lib/env/client';
-import { DARK_THEME, LIGHT_THEME, useColorScheme, trpc } from '~/lib/utils';
+import {
+  DARK_THEME,
+  LIGHT_THEME,
+  useColorScheme,
+  TRPCProvider,
+} from '~/lib/utils';
+import type { AppRouter } from '~/server';
 
 // https://github.com/nativewind/nativewind/issues/1153#issuecomment-2428123382
 configureReanimatedLogger({
@@ -65,7 +71,7 @@ export default function Layout() {
   );
 
   const [trpcClient] = useState(() =>
-    trpc.createClient({
+    createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
           url: new URL('api/trpc', clientEnv.EXPO_PUBLIC_HOST_URL),
@@ -109,14 +115,17 @@ export default function Layout() {
     <StrictMode>
       <ThemeProvider value={colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME}>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <SafeAreaView style={{ flex: 1 }} edges={['top', 'right', 'left']}>
+        <QueryClientProvider client={queryClient}>
+          <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+            <SafeAreaView
+              style={{ flex: 1 }}
+              className={'bg-background'}
+              edges={['top', 'right', 'left']}>
               <Slot />
               <Toast position={'bottom'} />
             </SafeAreaView>
-          </QueryClientProvider>
-        </trpc.Provider>
+          </TRPCProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </StrictMode>
   );

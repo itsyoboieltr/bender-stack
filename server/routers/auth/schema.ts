@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 import { minPasswordLength, otp } from '~/lib/shared';
 
 export const userSignInSchema = z.object({
-  email: z.string().trim().min(1).email(),
+  email: z.email().trim().min(1),
   password: z.string().trim().min(minPasswordLength),
 });
 
@@ -16,7 +16,7 @@ export const createDefaultUserSignIn = (): UserSignIn => ({
 
 export const userSignUpSchema = z.object({
   name: z.string().trim().min(1),
-  email: z.string().trim().min(1).email(),
+  email: z.email().trim().min(1),
   password: z.string().trim().min(minPasswordLength),
 });
 
@@ -29,13 +29,13 @@ export const createDefaultUserSignUp = (): UserSignUp => ({
 });
 
 export const userForgotPasswordSchema = z.object({
-  email: z.string().trim().min(1).email(),
+  email: z.email().trim().min(1),
 });
 
 export const userResetPasswordSchema = z
   .object({
     step: z.union([z.literal('email'), z.literal('otp'), z.literal('reset')]),
-    email: z.string().trim().min(1).email(),
+    email: z.email().trim().min(1),
     otp: z.string().trim().length(otp.otpLength),
     password: z.string().trim().min(minPasswordLength),
     passwordConfirm: z.string().trim().min(minPasswordLength),

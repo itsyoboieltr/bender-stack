@@ -1,8 +1,9 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { View } from 'react-native';
 
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { trpc } from '~/lib/utils';
+import { useTRPC } from '~/lib/utils';
 
 interface TodoProps {
   id: string;
@@ -10,13 +11,16 @@ interface TodoProps {
 }
 
 export default function Todo(props: TodoProps) {
-  const utils = trpc.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const todoDelete = trpc.todo.delete.useMutation({
-    onSuccess: async () => {
-      await utils.todo.get.invalidate();
-    },
-  });
+  const todoDelete = useMutation(
+    trpc.todo.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.todo.get.queryFilter());
+      },
+    })
+  );
 
   const todoDeletingDisabled = todoDelete.isPending;
 

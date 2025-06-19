@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Platform, View } from 'react-native';
@@ -7,25 +7,28 @@ import Todo from '~/components/todo';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Text } from '~/components/ui/text';
-import { trpc, auth } from '~/lib/utils';
+import { auth, useTRPC } from '~/lib/utils';
 import {
   createDefaultTodo,
   todoInsertSchema,
 } from '~/server/routers/todo/schema';
 
 export default function App() {
-  const utils = trpc.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const todoQuery = trpc.todo.get.useQuery();
+  const todoQuery = useQuery(trpc.todo.get.queryOptions());
 
   const [todo, setTodo] = useState(createDefaultTodo());
 
-  const todoAdd = trpc.todo.post.useMutation({
-    onSuccess: async () => {
-      setTodo(createDefaultTodo());
-      await utils.todo.get.invalidate();
-    },
-  });
+  const todoAdd = useMutation(
+    trpc.todo.post.mutationOptions({
+      onSuccess: async () => {
+        setTodo(createDefaultTodo());
+        await queryClient.invalidateQueries(trpc.todo.get.queryFilter());
+      },
+    })
+  );
 
   const todoAddingDisabled =
     todoAdd.isPending || !todoInsertSchema.safeParse(todo).success;

@@ -1,11 +1,11 @@
 import { createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 import { todo } from './table';
 
 export const todoSchema = createSelectSchema(todo, {
-  id: z.string().trim().min(1),
-  data: z.string().trim().min(1),
+  id: (schema) => schema.trim().min(1),
+  data: (schema) => schema.trim().min(1),
 });
 
 export type Todo = z.infer<typeof todoSchema>;
