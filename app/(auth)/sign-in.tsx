@@ -95,7 +95,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
       </View>
       <Button
         disabled={signInDisabled}
-        loading={props.signIn.isPending}
+        loading={props.signIn.isPending || props.signIn.isSuccess}
         onPress={() => props.signIn.mutate(user)}>
         <Text>Sign in</Text>
       </Button>

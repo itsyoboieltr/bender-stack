@@ -27,8 +27,8 @@ export default function App() {
   const todoAdd = useMutation(
     trpc.todo.post.mutationOptions({
       onSuccess: async () => {
-        setTodo(createDefaultTodo());
         await queryClient.invalidateQueries(trpc.todo.get.queryFilter());
+        setTodo(createDefaultTodo());
       },
     })
   );
@@ -74,7 +74,9 @@ export default function App() {
         </Button>
       </View>
       <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
-      <Button loading={signOut.isPending} onPress={() => signOut.mutate()}>
+      <Button
+        loading={signOut.isPending || signOut.isSuccess}
+        onPress={() => signOut.mutate()}>
         <Text>Sign out</Text>
       </Button>
     </View>
