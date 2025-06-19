@@ -14,10 +14,13 @@ import {
 } from '~/server/routers/todo/schema';
 
 export default function App() {
+  const session = auth.useSession();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const todoQuery = useQuery(trpc.todo.get.queryOptions());
+  const todoQuery = useQuery(
+    trpc.todo.get.queryOptions(undefined, { enabled: !!session.data })
+  );
 
   const [todo, setTodo] = useState(createDefaultTodo());
 
@@ -40,7 +43,6 @@ export default function App() {
     },
   });
 
-  const session = auth.useSession();
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (!session.data) return <Redirect href={'/sign-in'} />;
   if (!session.data.user.emailVerified)

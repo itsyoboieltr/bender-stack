@@ -7,6 +7,7 @@ import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 
 export default function VerifyEmail() {
+  const session = auth.useSession();
   const verifyEmail = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.verifyEmail>[0]
@@ -28,7 +29,6 @@ export default function VerifyEmail() {
     },
   });
 
-  const session = auth.useSession();
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (!session.data) return <Redirect href={'/sign-in'} />;
   if (session.data.user.emailVerified) return <Redirect href={'/'} />;

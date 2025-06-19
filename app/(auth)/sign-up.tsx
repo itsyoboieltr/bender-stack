@@ -15,6 +15,7 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function SignUp() {
+  const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserSignUp());
 
   const signUp = useMutation({
@@ -34,7 +35,6 @@ export default function SignUp() {
   const signUpDisabled =
     signUp.isPending || !userSignUpSchema.safeParse(user).success;
 
-  const session = auth.useSession();
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (session.data) return <Redirect href={'/'} />;
 

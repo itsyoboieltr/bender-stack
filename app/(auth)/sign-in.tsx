@@ -16,6 +16,7 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function SignIn() {
+  const session = auth.useSession();
   const router = useRouter();
   const signIn = useMutation({
     mutationFn: async (data: UserSignIn) => {
@@ -41,7 +42,6 @@ export default function SignIn() {
     },
   });
 
-  const session = auth.useSession();
   if (session.data) return <Redirect href={'/'} />;
 
   return (

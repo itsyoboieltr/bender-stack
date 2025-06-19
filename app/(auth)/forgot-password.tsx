@@ -18,9 +18,9 @@ import {
 } from '~/server/routers/auth/schema';
 
 export default function ForgotPassword() {
+  const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserResetPassword());
 
-  const session = auth.useSession();
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (session.data) return <Redirect href={'/'} />;
 
