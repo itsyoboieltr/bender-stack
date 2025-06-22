@@ -13,7 +13,7 @@ import {
   createDefaultUserSignIn,
   type UserSignIn,
   userSignInSchema,
-} from '~/server/routers/auth/schema';
+} from '~/server/routers/auth/validation';
 
 export default function SignIn() {
   const session = auth.useSession();

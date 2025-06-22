@@ -11,7 +11,7 @@ import { auth, useTRPC } from '~/lib/utils';
 import {
   createDefaultTodo,
   todoInsertSchema,
-} from '~/server/routers/todo/schema';
+} from '~/server/routers/todo/validation';
 
 export default function App() {
   const session = auth.useSession();

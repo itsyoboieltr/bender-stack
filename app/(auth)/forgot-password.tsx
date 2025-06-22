@@ -15,7 +15,7 @@ import {
   type UserResetPassword,
   userForgotPasswordSchema,
   userResetPasswordSchema,
-} from '~/server/routers/auth/schema';
+} from '~/server/routers/auth/validation';
 
 export default function ForgotPassword() {
   const session = auth.useSession();
