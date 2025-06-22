@@ -6,6 +6,7 @@ import {
   emailOTP,
   twoFactor,
 } from 'better-auth/plugins';
+import { name as appName } from 'package.json';
 import { ulid } from 'ulidx';
 
 import { sendResetPasswordEmail } from '~/lib/emails/reset-password-email';
@@ -15,7 +16,7 @@ import { minPasswordLength, otp, totp } from '~/lib/shared';
 import { db } from './db';
 
 export const auth = betterAuth({
-  appName: 'bender-stack',
+  appName,
   database: drizzleAdapter(db, { provider: 'pg' }),
   session: {
     cookieCache: {
@@ -35,10 +36,7 @@ export const auth = betterAuth({
           return await sendResetPasswordEmail(data);
       },
     }),
-    twoFactor({
-      issuer: 'bender-stack',
-      totpOptions: { ...totp },
-    }),
+    twoFactor({ issuer: appName, totpOptions: { ...totp } }),
   ],
   advanced: { database: { generateId: () => ulid() } },
   emailAndPassword: { enabled: true, minPasswordLength },
