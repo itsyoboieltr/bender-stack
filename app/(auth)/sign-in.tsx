@@ -11,8 +11,8 @@ import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 import {
   createDefaultUserSignIn,
-  userSignInSchema,
   type UserSignIn,
+  userSignInSchema,
 } from '~/server/routers/auth/schema';
 
 export default function SignIn() {

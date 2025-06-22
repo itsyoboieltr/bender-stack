@@ -1,4 +1,4 @@
-import { Theme, DefaultTheme } from '@react-navigation/native';
+import { DefaultTheme, type Theme } from '@react-navigation/native';
 import { createTRPCContext } from '@trpc/tanstack-react-query';
 import {
   adminClient,
@@ -6,7 +6,7 @@ import {
   twoFactorClient,
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
-import { clsx, type ClassValue } from 'clsx';
+import { type ClassValue, clsx } from 'clsx';
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
 import { twMerge } from 'tailwind-merge';
 

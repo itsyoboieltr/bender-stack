@@ -1,5 +1,5 @@
 import { initTRPC, TRPCError } from '@trpc/server';
-import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
+import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod/v4';
 import { fromError } from 'zod-validation-error';
 

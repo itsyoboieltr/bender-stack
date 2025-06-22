@@ -1,9 +1,9 @@
 import type { OTPInputProps } from 'input-otp-native';
 
+import { otp } from '~/lib/shared';
+
 import { OTPInput } from './ui/otp-input';
 import { Text } from './ui/text';
-
-import { otp } from '~/lib/shared';
 
 export default function EmailOTP(props: Partial<OTPInputProps>) {
   return (

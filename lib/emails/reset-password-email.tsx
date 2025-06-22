@@ -5,8 +5,8 @@ import {
   Heading,
   Html,
   Preview,
-  Text,
   render,
+  Text,
 } from '@react-email/components';
 import type { emailOTP } from 'better-auth/plugins';
 

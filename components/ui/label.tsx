@@ -1,4 +1,3 @@
-/* eslint-disable import/namespace */
 import * as LabelPrimitive from '@rn-primitives/label';
 import * as React from 'react';
 

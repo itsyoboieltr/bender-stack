@@ -1,5 +1,5 @@
 import { OTPInput as InputOTP, type OTPInputProps } from 'input-otp-native';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { cn } from '~/lib/utils';
 

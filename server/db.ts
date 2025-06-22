@@ -1,9 +1,9 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
 
-import * as schema from './routers/schema';
-
 import { serverEnv } from '~/lib/env/server';
+
+import * as schema from './routers/schema';
 
 /**
  * Cache the database connection in development. This avoids creating a new connection on every HMR

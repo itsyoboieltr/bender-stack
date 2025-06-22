@@ -8,11 +8,11 @@ import {
 } from 'better-auth/plugins';
 import { ulid } from 'ulidx';
 
-import { db } from './db';
-
 import { sendResetPasswordEmail } from '~/lib/emails/reset-password-email';
 import { sendVerificationEmail } from '~/lib/emails/verification-email';
 import { minPasswordLength, otp, totp } from '~/lib/shared';
+
+import { db } from './db';
 
 export const auth = betterAuth({
   appName: 'bender-stack',
@@ -31,7 +31,7 @@ export const auth = betterAuth({
       sendVerificationOTP: async (data) => {
         if (data.type === 'email-verification')
           return await sendVerificationEmail(data);
-        else if (data.type === 'forget-password')
+        if (data.type === 'forget-password')
           return await sendResetPasswordEmail(data);
       },
     }),

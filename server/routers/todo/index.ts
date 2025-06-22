@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
 
-import { todoInsertSchema, todoDeleteSchema } from './schema';
-import { todo } from './table';
 import { db } from '../../db';
 import { protectedProcedure, router } from '../../trpc';
+import { todoDeleteSchema, todoInsertSchema } from './schema';
+import { todo } from './table';
 
 export const todoRouter = router({
   get: protectedProcedure.query(async () => await db.select().from(todo)),

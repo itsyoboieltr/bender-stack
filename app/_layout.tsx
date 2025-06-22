@@ -1,4 +1,3 @@
-import '../global.css';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from '@react-navigation/native';
 import {
@@ -8,7 +7,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import { SplashScreen, Slot } from 'expo-router';
+import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { StrictMode, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
@@ -23,10 +22,12 @@ import { clientEnv } from '~/lib/env/client';
 import {
   DARK_THEME,
   LIGHT_THEME,
-  useColorScheme,
   TRPCProvider,
+  useColorScheme,
 } from '~/lib/utils';
 import type { AppRouter } from '~/server';
+
+import '../global.css';
 
 // https://github.com/nativewind/nativewind/issues/1153#issuecomment-2428123382
 configureReanimatedLogger({
@@ -45,7 +46,6 @@ export {
 } from 'expo-router';
 
 // Prevent the splash screen from auto-hiding
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
@@ -105,9 +105,8 @@ export default function Layout() {
       setIsColorSchemeLoaded(true);
       await SplashScreen.hideAsync();
     };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     initialize();
-  }, []);
+  }, [colorScheme, setColorScheme]);
 
   if (!isColorSchemeLoaded) return null;
 

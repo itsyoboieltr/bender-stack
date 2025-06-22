@@ -10,8 +10,8 @@ import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 import {
   createDefaultUserSignUp,
-  userSignUpSchema,
   type UserSignUp,
+  userSignUpSchema,
 } from '~/server/routers/auth/schema';
 
 export default function SignUp() {

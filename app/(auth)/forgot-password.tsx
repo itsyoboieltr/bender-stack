@@ -11,10 +11,10 @@ import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 import {
-  type UserResetPassword,
   createDefaultUserResetPassword,
-  userResetPasswordSchema,
+  type UserResetPassword,
   userForgotPasswordSchema,
+  userResetPasswordSchema,
 } from '~/server/routers/auth/schema';
 
 export default function ForgotPassword() {

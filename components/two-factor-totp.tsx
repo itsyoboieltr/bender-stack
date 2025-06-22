@@ -1,9 +1,9 @@
 import type { OTPInputProps } from 'input-otp-native';
 
+import { totp } from '~/lib/shared';
+
 import { OTPInput } from './ui/otp-input';
 import { Text } from './ui/text';
-
-import { totp } from '~/lib/shared';
 
 export default function TwoFactorTOTP(props: Partial<OTPInputProps>) {
   return (

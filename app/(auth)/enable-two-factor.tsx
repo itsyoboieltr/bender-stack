@@ -12,9 +12,9 @@ import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
 import { auth, cn } from '~/lib/utils';
 import {
-  userEnableTwoFactorSchema,
-  type UserEnableTwoFactor,
   createDefaultUserEnableTwoFactor,
+  type UserEnableTwoFactor,
+  userEnableTwoFactorSchema,
 } from '~/server/routers/auth/schema';
 
 export default function EnableTwoFactor() {

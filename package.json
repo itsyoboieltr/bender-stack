@@ -6,8 +6,7 @@
     "dev": "expo start --clear --port 3000",
     "build": "expo export --platform web",
     "start": "bun index.ts",
-    "lint": "eslint --max-warnings=0 .",
-    "format": "prettier --check .",
+    "check": "biome check .",
     "db:push": "drizzle-kit push",
     "auth:generate": "bunx @better-auth/cli generate --output server/routers/auth/table.ts",
     "auth:secret": "bunx @better-auth/cli secret",
@@ -66,13 +65,9 @@
     "@types/bun": "1.2.16",
     "@types/nodemailer": "6.4.17",
     "@types/react": "~19.0.10",
-    "eslint": "8.56.0",
-    "eslint-config-universe": "14.0.0",
-    "eslint-plugin-drizzle": "0.2.3",
-    "prettier": "3.5.3",
-    "prettier-plugin-tailwindcss": "0.6.13",
     "react-email": "4.0.16",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "@biomejs/biome": "2.0.4"
   },
   "patchedDependencies": {
     "layerr@3.0.0": "patches/layerr@3.0.0.patch"
