@@ -69,15 +69,9 @@
     "typescript": "~5.8.3",
     "@biomejs/biome": "2.0.4"
   },
-  "patchedDependencies": {
-    "layerr@3.0.0": "patches/layerr@3.0.0.patch"
-  },
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
-        "exclude": [
-          "lucide-react-native"
-        ],
         "listUnknownPackages": false
       }
     }
