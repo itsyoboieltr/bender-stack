@@ -5,13 +5,15 @@ import { name } from 'package.json';
 const handler = createRequestHandler(path.join(import.meta.dir, 'dist/server'));
 
 const server = Bun.serve({
-  async fetch(req) {
-    const url = new URL(req.url);
-    if (url.pathname.includes('/_expo/static')) {
-      const file = Bun.file(`dist/client${url.pathname}`);
-      return new Response(file);
-    }
-    return await handler(req);
+  routes: {
+    '/_expo/static/*': async (request) => {
+      const file = Bun.file(`./dist/client/${new URL(request.url).pathname}`);
+      const exists = await file.exists();
+      return exists
+        ? new Response(file)
+        : new Response('Not found', { status: 404 });
+    },
+    '/*': async (request) => await handler(request),
   },
 });
 
