@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -18,6 +19,7 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserResetPassword());
 
@@ -26,7 +28,7 @@ export default function ForgotPassword() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Forgot password</Text>
+      <Text className={'font-semibold'}>{t('forgotPassword')}</Text>
       {user.step === 'email' ? (
         <ForgotPasswordEmailStep user={user} setUser={setUser} />
       ) : user.step === 'otp' ? (
@@ -44,6 +46,7 @@ interface ForgotPasswordStepProps {
 }
 
 function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
+  const { t } = useTranslation();
   const sendVerificationOtp = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0]
@@ -59,7 +62,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
   return (
     <>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>Email</Label>
+        <Label>{t('email')}</Label>
         <Input
           value={props.user.email}
           onChangeText={(email) => props.setUser({ ...props.user, email })}
@@ -81,7 +84,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
             type: 'forget-password',
           })
         }>
-        <Text>Continue</Text>
+        <Text>{t('continue')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Link href={'/sign-in'} asChild>
@@ -89,7 +92,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            Back
+            {t('back')}
           </Text>
         </Link>
       </View>
@@ -98,6 +101,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
 }
 
 function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
+  const { t } = useTranslation();
   return (
     <>
       <EmailOTP
@@ -111,7 +115,7 @@ function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'email' })}>
-          Back
+          {t('back')}
         </Text>
       </View>
     </>
@@ -119,6 +123,7 @@ function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
 }
 
 function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const resetPassword = useMutation({
     mutationFn: async (
@@ -130,8 +135,8 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
     onSuccess: () => {
       Toast.show({
         type: 'success',
-        text1: 'Success',
-        text2: 'Your password was successfully reset',
+        text1: t('success'),
+        text2: t('yourPasswordWasSuccessfullyReset'),
       });
       router.replace('/sign-in');
     },
@@ -144,7 +149,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
   return (
     <>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>New password</Label>
+        <Label>{t('newPassword')}</Label>
         <Input
           value={props.user.password}
           onChangeText={(password) =>
@@ -154,7 +159,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
         />
       </View>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>Confirm new password</Label>
+        <Label>{t('confirmNewPassword')}</Label>
         <Input
           value={props.user.passwordConfirm}
           onChangeText={(passwordConfirm) =>
@@ -170,7 +175,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
         disabled={resetPasswordDisabled}
         loading={resetPassword.isPending}
         onPress={() => resetPassword.mutate(props.user)}>
-        <Text>Submit</Text>
+        <Text>{t('submit')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
@@ -178,7 +183,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'otp' })}>
-          Back
+          {t('back')}
         </Text>
       </View>
     </>

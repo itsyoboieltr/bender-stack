@@ -26,6 +26,7 @@ import {
   useColorScheme,
 } from '~/lib/utils';
 import type { AppRouter } from '~/server';
+import '~/lib/i18n';
 
 import '../global.css';
 

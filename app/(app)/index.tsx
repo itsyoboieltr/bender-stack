@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Platform, View } from 'react-native';
 
 import Todo from '~/components/todo';
@@ -14,6 +15,7 @@ import {
 } from '~/server/routers/todo/validation';
 
 export default function App() {
+  const { t } = useTranslation();
   const session = auth.useSession();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -70,14 +72,14 @@ export default function App() {
           disabled={todoAddingDisabled}
           loading={todoAdd.isPending}
           onPress={() => todoAdd.mutate(todo)}>
-          <Text>Submit</Text>
+          <Text>{t('submit')}</Text>
         </Button>
       </View>
       <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
       <Button
         loading={signOut.isPending || signOut.isSuccess}
         onPress={() => signOut.mutate()}>
-        <Text>Sign out</Text>
+        <Text>{t('signOut')}</Text>
       </Button>
     </View>
   );

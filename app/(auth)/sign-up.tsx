@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 
 import { Button } from '~/components/ui/button';
@@ -15,6 +16,7 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserSignUp());
 
@@ -40,23 +42,23 @@ export default function SignUp() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Sign up</Text>
+      <Text className={'font-semibold'}>{t('signUp')}</Text>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>Email</Label>
+        <Label>{t('email')}</Label>
         <Input
           value={user.email}
           onChangeText={(email) => setUser({ ...user, email })}
         />
       </View>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>Name</Label>
+        <Label>{t('name')}</Label>
         <Input
           value={user.name}
           onChangeText={(name) => setUser({ ...user, name })}
         />
       </View>
       <View className={'flex flex-col justify-center gap-1'}>
-        <Label>Password</Label>
+        <Label>{t('password')}</Label>
         <Input
           value={user.password}
           onChangeText={(password) => setUser({ ...user, password })}
@@ -70,16 +72,16 @@ export default function SignUp() {
         disabled={signUpDisabled}
         loading={signUp.isPending}
         onPress={() => signUp.mutate(user)}>
-        <Text>Sign up</Text>
+        <Text>{t('signUp')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>Already have an account?</Text>
+        <Text numberOfLines={1}>{t('alreadyHaveAnAccount')}</Text>
         <Link href={'/sign-in'} asChild>
           <Text
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            Sign in
+            {t('signIn')}
           </Text>
         </Link>
       </View>
