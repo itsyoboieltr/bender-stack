@@ -20,7 +20,12 @@
   "signUp": "Sign up",
   "name": "Name",
   "alreadyHaveAnAccount": "Already have an account?",
-  "verifyEmail": "Verify your email address",
   "OTPText": "We've sent you a mail. Please check your inbox and enter the {{count}} digit code to verify your email.",
-  "TOTPText": "Please enter the {{count}} digit code from your authenticator app."
+  "TOTPText": "Please enter the {{count}} digit code from your authenticator app.",
+  "resetYourPassword": "Reset your password",
+  "resetYourPasswordText": "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {{count}} minutes.",
+  "ifYouDoNotWantToChangeYourPassword": "If you do not want to change your password or did not request this, just ignore and delete this message.",
+  "verifyEmail": "Verify your email address",
+  "verifyEmailText": "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {{count}} minutes.",
+  "ifYouDoNotWantToVerifyYourEmail": "If you do not want to verify your email or did not request this, just ignore and delete this message."
 }

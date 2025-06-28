@@ -3,16 +3,13 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { z } from 'zod/v4';
 
-import en from '~/assets/locales/en.json';
+import {
+  fallbackLocale,
+  resources,
+  type SupportedLanguage,
+  supportedLngs,
+} from '~/lib/shared';
 import { storage } from '~/lib/storage';
-
-const resources = {
-  en: { translation: en },
-};
-
-type SupportedLanguage = keyof typeof resources;
-
-const supportedLngs = Object.keys(resources) as [SupportedLanguage];
 
 const locales = getLocales();
 
@@ -20,15 +17,13 @@ const firstDeviceLocale = locales[0]?.languageCode as
   | SupportedLanguage
   | undefined;
 
-const fallbackLocale = 'en' satisfies SupportedLanguage;
-
 const defaultLanguage = firstDeviceLocale
   ? supportedLngs.includes(firstDeviceLocale)
     ? firstDeviceLocale
     : fallbackLocale
   : fallbackLocale;
 
-export const getLanguage = () => {
+export const getLanguageFromStorage = () => {
   const storedLanguage = storage.get('language') as SupportedLanguage | null;
 
   const language = storedLanguage
@@ -40,7 +35,7 @@ export const getLanguage = () => {
   return language;
 };
 
-const lng = getLanguage();
+const lng = getLanguageFromStorage();
 
 z.config(z.locales[lng]());
 

@@ -9,26 +9,33 @@ import {
   Text,
 } from '@react-email/components';
 import type { emailOTP } from 'better-auth/plugins';
+import i18n from 'i18next';
 
 import { serverEnv } from '~/lib/env/server';
-import { otp } from '~/lib/shared';
+import { otp, type SupportedLanguage } from '~/lib/shared';
 import { transporter } from '~/server/email';
+import { getLanguageFromRequest } from '~/server/i18n';
 
 type SendVerificationOTP = Parameters<
   typeof emailOTP
 >[0]['sendVerificationOTP'];
 
-export const sendVerificationEmail: SendVerificationOTP = async (data) => {
+export const sendVerificationEmail: SendVerificationOTP = async (
+  data,
+  request
+) => {
+  const lng = getLanguageFromRequest(request);
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
     to: data.email,
-    subject: 'Verify your email address',
-    html: await render(<VerificationEmail data={data} />),
+    subject: i18n.t('verifyEmail', { lng }),
+    html: await render(<VerificationEmail data={data} lng={lng} />),
   });
 };
 
 interface VerificationEmailProps {
   data: Parameters<SendVerificationOTP>[0];
+  lng: SupportedLanguage;
 }
 
 VerificationEmail.PreviewProps = {
@@ -37,25 +44,26 @@ VerificationEmail.PreviewProps = {
     otp: '123456',
     type: 'email-verification',
   },
+  lng: 'en',
 } satisfies VerificationEmailProps;
 
-export default function VerificationEmail(props: VerificationEmailProps) {
+export default function VerificationEmail({
+  data,
+  lng,
+}: VerificationEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address</Preview>
+      <Preview>{i18n.t('verifyEmail', { lng })}</Preview>
       <Body>
         <Container>
-          <Heading style={heading}>Verify your email address</Heading>
+          <Heading style={heading}>{i18n.t('verifyEmail', { lng })}</Heading>
           <Text style={text}>
-            We want to make sure it's really you. Please enter the following
-            code when prompted. This code will expire in {otp.expiresIn / 60}{' '}
-            minutes.
+            {i18n.t('verifyEmailText', { count: otp.expiresIn / 60, lng })}
           </Text>
-          <Text style={code}>{props.data.otp}</Text>
+          <Text style={code}>{data.otp}</Text>
           <Text style={text}>
-            If you do not want to verify your email or did not request this,
-            just ignore and delete this message.
+            {i18n.t('ifYouDoNotWantToVerifyYourEmail', { lng })}
           </Text>
         </Container>
       </Body>

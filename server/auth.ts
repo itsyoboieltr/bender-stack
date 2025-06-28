@@ -29,11 +29,11 @@ export const auth = betterAuth({
     emailOTP({
       ...otp,
       disableSignUp: true, // disable automatic sign-up
-      sendVerificationOTP: async (data) => {
+      sendVerificationOTP: async (data, request) => {
         if (data.type === 'email-verification')
-          return await sendVerificationEmail(data);
+          return await sendVerificationEmail(data, request);
         if (data.type === 'forget-password')
-          return await sendResetPasswordEmail(data);
+          return await sendResetPasswordEmail(data, request);
       },
     }),
     twoFactor({ issuer: appName, totpOptions: { ...totp } }),
