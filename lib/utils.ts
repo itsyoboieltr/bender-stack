@@ -12,6 +12,7 @@ import { useColorScheme as useNativewindColorScheme } from 'nativewind';
 import { twMerge } from 'tailwind-merge';
 
 import { clientEnv } from '~/lib/env/client';
+import { getLanguage } from '~/lib/i18n';
 import type { AppRouter } from '~/server';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
@@ -55,6 +56,11 @@ export const DARK_THEME: Theme = {
 export const auth = createAuthClient({
   baseURL: clientEnv.EXPO_PUBLIC_HOST_URL,
   plugins: [adminClient(), emailOTPClient(), twoFactorClient()],
+  fetchOptions: {
+    onRequest: (context) => {
+      context.headers.set('Accept-Language', getLanguage());
+    },
+  },
 });
 
 export const { TRPCProvider, useTRPC, useTRPCClient } =

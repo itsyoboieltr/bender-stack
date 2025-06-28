@@ -10,9 +10,9 @@ const resources = {
   en: { translation: en },
 };
 
-export type SupportedLanguage = keyof typeof resources;
+type SupportedLanguage = keyof typeof resources;
 
-export const supportedLngs = Object.keys(resources) as [SupportedLanguage];
+const supportedLngs = Object.keys(resources) as [SupportedLanguage];
 
 const locales = getLocales();
 
@@ -28,15 +28,19 @@ const defaultLanguage = firstDeviceLocale
     : fallbackLocale
   : fallbackLocale;
 
-const storedLanguage = (
-  typeof window !== 'undefined' ? storage.get('language') : null
-) as SupportedLanguage | null;
+export const getLanguage = () => {
+  const storedLanguage = storage.get('language') as SupportedLanguage | null;
 
-const lng = storedLanguage
-  ? supportedLngs.includes(storedLanguage)
-    ? storedLanguage
-    : defaultLanguage
-  : defaultLanguage;
+  const language = storedLanguage
+    ? supportedLngs.includes(storedLanguage)
+      ? storedLanguage
+      : defaultLanguage
+    : defaultLanguage;
+
+  return language;
+};
+
+const lng = getLanguage();
 
 z.config(z.locales[lng]());
 
