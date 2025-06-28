@@ -22,15 +22,12 @@ export default function Todo(props: TodoProps) {
     })
   );
 
-  const todoDeletingDisabled = todoDelete.isPending;
-
   return (
     <View className={'flex flex-row items-center justify-center gap-4'}>
       <Text>{props.data}</Text>
       <Button
         variant={'destructive'}
         size={'sm'}
-        disabled={todoDeletingDisabled}
         loading={todoDelete.isPending}
         onPress={() => todoDelete.mutate({ id: props.id })}>
         <Text>X</Text>
