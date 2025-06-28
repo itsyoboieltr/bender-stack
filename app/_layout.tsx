@@ -29,6 +29,7 @@ import type { AppRouter } from '~/server';
 import '~/lib/i18n';
 
 import '../global.css';
+import { useTranslation } from 'react-i18next';
 
 // https://github.com/nativewind/nativewind/issues/1153#issuecomment-2428123382
 configureReanimatedLogger({
@@ -50,6 +51,7 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+  const { t } = useTranslation();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -62,11 +64,19 @@ export default function Layout() {
         },
         queryCache: new QueryCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
+            Toast.show({
+              type: 'error',
+              text1: t('error'),
+              text2: t(e.message),
+            }),
         }),
         mutationCache: new MutationCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
+            Toast.show({
+              type: 'error',
+              text1: t('error'),
+              text2: t(e.message),
+            }),
         }),
       })
   );

@@ -41,7 +41,8 @@
       "recommended": true,
       "correctness": {
         "noUnusedImports": "error",
-        "noUnusedVariables": "error"
+        "noUnusedVariables": "error",
+        "noChildrenProp": "off"
       },
       "style": {
         "noParameterAssign": "error",

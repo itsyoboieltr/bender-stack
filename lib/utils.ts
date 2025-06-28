@@ -1,4 +1,5 @@
 import { DefaultTheme, type Theme } from '@react-navigation/native';
+import { createFormHookContexts } from '@tanstack/react-form';
 import { createTRPCContext } from '@trpc/tanstack-react-query';
 import {
   adminClient,
@@ -58,3 +59,6 @@ export const auth = createAuthClient({
 
 export const { TRPCProvider, useTRPC, useTRPCClient } =
   createTRPCContext<AppRouter>();
+
+export const { fieldContext, useFieldContext, formContext, useFormContext } =
+  createFormHookContexts();

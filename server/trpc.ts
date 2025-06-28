@@ -1,7 +1,6 @@
 import { initTRPC, TRPCError } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod/v4';
-import { fromError } from 'zod-validation-error';
 
 import { auth } from './auth';
 
@@ -18,7 +17,7 @@ export const { router, procedure, middleware } = initTRPC
         ...shape,
         message:
           error.cause instanceof ZodError
-            ? fromError(error.cause).toString()
+            ? error.cause.issues[0]?.message
             : error.message,
       };
     },

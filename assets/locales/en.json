@@ -11,6 +11,7 @@
   "forgotPassword": "Forgot password",
   "email": "Email",
   "success": "Success",
+  "error": "Error",
   "yourPasswordWasSuccessfullyReset": "Your password was successfully reset",
   "newPassword": "New password",
   "confirmNewPassword": "Confirm new password",

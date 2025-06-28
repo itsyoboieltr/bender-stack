@@ -8,9 +8,8 @@ import QRCode from 'react-qr-code';
 
 import TwoFactorTOTPSection from '~/components/two-factor-totp';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
+import { useAppForm } from '~/lib/form';
 import { auth, cn } from '~/lib/utils';
 import {
   createDefaultUserEnableTwoFactor,
@@ -50,20 +49,22 @@ interface EnableTwoFactorStepProps {
 
 function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
   const { t } = useTranslation();
+
   const enableTwoFactor = useMutation({
     mutationFn: async (data: Parameters<typeof auth.twoFactor.enable>[0]) => {
       const response = await auth.twoFactor.enable(data);
       if (response.error) throw new Error(response.error.message);
       return response.data;
     },
-    onSuccess: (data) => {
-      props.setUser({ ...props.user, step: 'scan', ...data });
-    },
+    onSuccess: (data) =>
+      props.setUser({ ...props.user, step: 'scan', ...data }),
   });
 
-  const enableTwoFactorDisabled = !userEnableTwoFactorSchema.safeParse(
-    props.user
-  ).success;
+  const form = useAppForm({
+    defaultValues: props.user,
+    validators: { onSubmit: userEnableTwoFactorSchema },
+    onSubmit: ({ value }) => enableTwoFactor.mutate(value),
+  });
 
   const signOut = useMutation({
     mutationFn: async () => {
@@ -74,23 +75,17 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
 
   return (
     <>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('password')}</Label>
-        <Input
-          value={props.user.password}
-          onChangeText={(password) =>
-            props.setUser({ ...props.user, password })
-          }
-          onSubmitEditing={() => {
-            if (!enableTwoFactorDisabled) enableTwoFactor.mutate(props.user);
-          }}
-          secureTextEntry
-        />
-      </View>
-      <Button
-        disabled={enableTwoFactorDisabled}
-        loading={enableTwoFactor.isPending}
-        onPress={() => enableTwoFactor.mutate(props.user)}>
+      <form.AppField
+        name={'password'}
+        children={(field) => (
+          <field.TextField
+            label={t('password')}
+            onSubmitEditing={form.handleSubmit}
+            secureTextEntry
+          />
+        )}
+      />
+      <Button loading={enableTwoFactor.isPending} onPress={form.handleSubmit}>
         <Text>{t('continue')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>

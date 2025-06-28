@@ -1,14 +1,12 @@
 import { type UseMutationResult, useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 
 import TwoFactorTOTP from '~/components/two-factor-totp';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
+import { useAppForm } from '~/lib/form';
 import { auth } from '~/lib/utils';
 import {
   createDefaultUserSignIn,
@@ -67,38 +65,34 @@ interface SignInStepProps {
 
 function SignInEmailAndPasswordStep(props: SignInStepProps) {
   const { t } = useTranslation();
-  const [user, setUser] = useState(createDefaultUserSignIn());
-
-  const signInDisabled =
-    props.signIn.isPending || !userSignInSchema.safeParse(user).success;
+  const form = useAppForm({
+    defaultValues: createDefaultUserSignIn(),
+    validators: { onSubmit: userSignInSchema },
+    onSubmit: ({ value }) => props.signIn.mutate(value),
+  });
 
   if (props.session.isPending) return <ActivityIndicator className={'mt-10'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>{t('signIn')}</Text>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('email')}</Label>
-        <Input
-          value={user.email}
-          onChangeText={(email) => setUser({ ...user, email })}
-        />
-      </View>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('password')}</Label>
-        <Input
-          value={user.password}
-          onChangeText={(password) => setUser({ ...user, password })}
-          onSubmitEditing={() => {
-            if (!signInDisabled) props.signIn.mutate(user);
-          }}
-          secureTextEntry
-        />
-      </View>
+      <form.AppField
+        name={'email'}
+        children={(field) => <field.TextField label={t('email')} />}
+      />
+      <form.AppField
+        name={'password'}
+        children={(field) => (
+          <field.TextField
+            label={t('password')}
+            onSubmitEditing={form.handleSubmit}
+            secureTextEntry
+          />
+        )}
+      />
       <Button
-        disabled={signInDisabled}
         loading={props.signIn.isPending || props.signIn.isSuccess}
-        onPress={() => props.signIn.mutate(user)}>
+        onPress={form.handleSubmit}>
         <Text>{t('signIn')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>

@@ -7,9 +7,8 @@ import Toast from 'react-native-toast-message';
 
 import EmailOTP from '~/components/email-otp';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
+import { useAppForm } from '~/lib/form';
 import { auth } from '~/lib/utils';
 import {
   createDefaultUserResetPassword,
@@ -47,6 +46,7 @@ interface ForgotPasswordStepProps {
 
 function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
   const { t } = useTranslation();
+
   const sendVerificationOtp = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0]
@@ -54,36 +54,34 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
       const response = await auth.emailOtp.sendVerificationOtp(data);
       if (response.error) throw new Error(response.error.message);
     },
-    onSuccess: () => props.setUser({ ...props.user, step: 'otp' }),
+    onSuccess: (_, variables) =>
+      props.setUser({ ...props.user, email: variables.email, step: 'otp' }),
   });
 
-  const disabled = !userForgotPasswordSchema.safeParse(props.user).success;
+  const form = useAppForm({
+    defaultValues: { email: props.user.email },
+    validators: { onSubmit: userForgotPasswordSchema },
+    onSubmit: ({ value }) =>
+      sendVerificationOtp.mutate({
+        email: value.email,
+        type: 'forget-password',
+      }),
+  });
 
   return (
     <>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('email')}</Label>
-        <Input
-          value={props.user.email}
-          onChangeText={(email) => props.setUser({ ...props.user, email })}
-          onSubmitEditing={() => {
-            if (!disabled)
-              sendVerificationOtp.mutate({
-                email: props.user.email,
-                type: 'forget-password',
-              });
-          }}
-        />
-      </View>
+      <form.AppField
+        name={'email'}
+        children={(field) => (
+          <field.TextField
+            label={t('email')}
+            onSubmitEditing={form.handleSubmit}
+          />
+        )}
+      />
       <Button
-        disabled={disabled}
         loading={sendVerificationOtp.isPending}
-        onPress={() =>
-          sendVerificationOtp.mutate({
-            email: props.user.email,
-            type: 'forget-password',
-          })
-        }>
+        onPress={form.handleSubmit}>
         <Text>{t('continue')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
@@ -125,6 +123,7 @@ function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
 function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
   const { t } = useTranslation();
   const router = useRouter();
+
   const resetPassword = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.resetPassword>[0]
@@ -142,39 +141,31 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
     },
   });
 
-  const resetPasswordDisabled =
-    resetPassword.isPending ||
-    !userResetPasswordSchema.safeParse(props.user).success;
+  const form = useAppForm({
+    defaultValues: props.user,
+    validators: { onSubmit: userResetPasswordSchema },
+    onSubmit: ({ value }) => resetPassword.mutate(value),
+  });
 
   return (
     <>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('newPassword')}</Label>
-        <Input
-          value={props.user.password}
-          onChangeText={(password) =>
-            props.setUser({ ...props.user, password })
-          }
-          secureTextEntry
-        />
-      </View>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('confirmNewPassword')}</Label>
-        <Input
-          value={props.user.passwordConfirm}
-          onChangeText={(passwordConfirm) =>
-            props.setUser({ ...props.user, passwordConfirm })
-          }
-          onSubmitEditing={() => {
-            if (!resetPasswordDisabled) resetPassword.mutate(props.user);
-          }}
-          secureTextEntry
-        />
-      </View>
-      <Button
-        disabled={resetPasswordDisabled}
-        loading={resetPassword.isPending}
-        onPress={() => resetPassword.mutate(props.user)}>
+      <form.AppField
+        name={'password'}
+        children={(field) => (
+          <field.TextField label={t('newPassword')} secureTextEntry />
+        )}
+      />
+      <form.AppField
+        name={'passwordConfirm'}
+        children={(field) => (
+          <field.TextField
+            label={t('confirmNewPassword')}
+            onSubmitEditing={form.handleSubmit}
+            secureTextEntry
+          />
+        )}
+      />
+      <Button loading={resetPassword.isPending} onPress={form.handleSubmit}>
         <Text>{t('submit')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>

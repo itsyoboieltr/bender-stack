@@ -1,13 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect } from 'expo-router';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
+import { useAppForm } from '~/lib/form';
 import { auth } from '~/lib/utils';
 import {
   createDefaultUserSignUp,
@@ -18,7 +16,6 @@ import {
 export default function SignUp() {
   const { t } = useTranslation();
   const session = auth.useSession();
-  const [user, setUser] = useState(createDefaultUserSignUp());
 
   const signUp = useMutation({
     mutationFn: async (user: UserSignUp) => {
@@ -34,8 +31,11 @@ export default function SignUp() {
     },
   });
 
-  const signUpDisabled =
-    signUp.isPending || !userSignUpSchema.safeParse(user).success;
+  const form = useAppForm({
+    defaultValues: createDefaultUserSignUp(),
+    validators: { onSubmit: userSignUpSchema },
+    onSubmit: ({ value }) => signUp.mutate(value),
+  });
 
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (session.data) return <Redirect href={'/'} />;
@@ -43,35 +43,25 @@ export default function SignUp() {
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>{t('signUp')}</Text>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('email')}</Label>
-        <Input
-          value={user.email}
-          onChangeText={(email) => setUser({ ...user, email })}
-        />
-      </View>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('name')}</Label>
-        <Input
-          value={user.name}
-          onChangeText={(name) => setUser({ ...user, name })}
-        />
-      </View>
-      <View className={'flex flex-col justify-center gap-1'}>
-        <Label>{t('password')}</Label>
-        <Input
-          value={user.password}
-          onChangeText={(password) => setUser({ ...user, password })}
-          onSubmitEditing={() => {
-            if (!signUpDisabled) signUp.mutate(user);
-          }}
-          secureTextEntry
-        />
-      </View>
-      <Button
-        disabled={signUpDisabled}
-        loading={signUp.isPending}
-        onPress={() => signUp.mutate(user)}>
+      <form.AppField
+        name={'email'}
+        children={(field) => <field.TextField label={t('email')} />}
+      />
+      <form.AppField
+        name={'name'}
+        children={(field) => <field.TextField label={t('name')} />}
+      />
+      <form.AppField
+        name={'password'}
+        children={(field) => (
+          <field.TextField
+            label={t('password')}
+            onSubmitEditing={form.handleSubmit}
+            secureTextEntry
+          />
+        )}
+      />
+      <Button loading={signUp.isPending} onPress={form.handleSubmit}>
         <Text>{t('signUp')}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>

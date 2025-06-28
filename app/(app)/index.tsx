@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Platform, View } from 'react-native';
 
 import Todo from '~/components/todo';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
 import { Text } from '~/components/ui/text';
+import { useAppForm } from '~/lib/form';
 import { auth, useTRPC } from '~/lib/utils';
 import {
   createDefaultTodo,
@@ -24,19 +23,20 @@ export default function App() {
     trpc.todo.get.queryOptions(undefined, { enabled: !!session.data })
   );
 
-  const [todo, setTodo] = useState(createDefaultTodo());
-
   const todoAdd = useMutation(
     trpc.todo.post.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.todo.get.queryFilter());
-        setTodo(createDefaultTodo());
+        form.reset();
       },
     })
   );
 
-  const todoAddingDisabled =
-    todoAdd.isPending || !todoInsertSchema.safeParse(todo).success;
+  const form = useAppForm({
+    defaultValues: createDefaultTodo(),
+    validators: { onSubmit: todoInsertSchema },
+    onSubmit: ({ value }) => todoAdd.mutate(value),
+  });
 
   const signOut = useMutation({
     mutationFn: async () => {
@@ -60,18 +60,16 @@ export default function App() {
         ))}
       </View>
       <View className={'flex flex-row justify-center gap-4'}>
-        <Input
-          value={todo.data}
-          onChangeText={(data) => setTodo({ data })}
-          blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
-          onSubmitEditing={() => {
-            if (!todoAddingDisabled) todoAdd.mutate(todo);
-          }}
+        <form.AppField
+          name={'data'}
+          children={(field) => (
+            <field.TextField
+              onSubmitEditing={form.handleSubmit}
+              blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
+            />
+          )}
         />
-        <Button
-          disabled={todoAddingDisabled}
-          loading={todoAdd.isPending}
-          onPress={() => todoAdd.mutate(todo)}>
+        <Button loading={todoAdd.isPending} onPress={form.handleSubmit}>
           <Text>{t('submit')}</Text>
         </Button>
       </View>
