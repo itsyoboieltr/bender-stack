@@ -79,7 +79,6 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
         name={'password'}
         children={(field) => (
           <field.TextField
-            label={t('password')}
             onSubmitEditing={form.handleSubmit}
             secureTextEntry
           />

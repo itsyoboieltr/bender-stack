@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { Input } from '~/components/ui/input';
@@ -8,13 +9,19 @@ import { cn, useFieldContext } from '~/lib/utils';
 
 interface TextFieldProps extends ComponentProps<typeof Input> {
   label?: string;
+  showLabel?: boolean;
 }
 
-export function TextField({ label, ...props }: TextFieldProps) {
+export function TextField({
+  label,
+  showLabel = true,
+  ...props
+}: TextFieldProps) {
+  const { t } = useTranslation();
   const field = useFieldContext<string>();
   return (
     <View className={'flex flex-col gap-1 w-60'}>
-      {label && <Label>{label}</Label>}
+      {showLabel && <Label>{label ?? t(field.name)}</Label>}
       <Input
         className={cn({
           'border-red-400 web:focus-visible:ring-red-300':
@@ -26,7 +33,7 @@ export function TextField({ label, ...props }: TextFieldProps) {
       />
       {!field.state.meta.isValid && (
         <Text className={'text-sm text-red-400'}>
-          {field.state.meta.errors[0]?.message}
+          {t(field.state.meta.errors[0]?.message)}
         </Text>
       )}
     </View>

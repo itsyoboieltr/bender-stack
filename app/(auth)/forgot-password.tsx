@@ -73,10 +73,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
       <form.AppField
         name={'email'}
         children={(field) => (
-          <field.TextField
-            label={t('email')}
-            onSubmitEditing={form.handleSubmit}
-          />
+          <field.TextField onSubmitEditing={form.handleSubmit} />
         )}
       />
       <Button

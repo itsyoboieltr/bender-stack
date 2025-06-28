@@ -27,5 +27,7 @@
   "ifYouDoNotWantToChangeYourPassword": "If you do not want to change your password or did not request this, just ignore and delete this message.",
   "verifyEmail": "Verify your email address",
   "verifyEmailText": "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {{count}} minutes.",
-  "ifYouDoNotWantToVerifyYourEmail": "If you do not want to verify your email or did not request this, just ignore and delete this message."
+  "ifYouDoNotWantToVerifyYourEmail": "If you do not want to verify your email or did not request this, just ignore and delete this message.",
+  "You are not authorized to access this resource": "You are not authorized to access this resource",
+  "Passwords must match": "Passwords must match"
 }

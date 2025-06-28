@@ -43,19 +43,12 @@ export default function SignUp() {
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>{t('signUp')}</Text>
-      <form.AppField
-        name={'email'}
-        children={(field) => <field.TextField label={t('email')} />}
-      />
-      <form.AppField
-        name={'name'}
-        children={(field) => <field.TextField label={t('name')} />}
-      />
+      <form.AppField name={'email'} children={(field) => <field.TextField />} />
+      <form.AppField name={'name'} children={(field) => <field.TextField />} />
       <form.AppField
         name={'password'}
         children={(field) => (
           <field.TextField
-            label={t('password')}
             onSubmitEditing={form.handleSubmit}
             secureTextEntry
           />

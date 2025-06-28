@@ -64,6 +64,7 @@ export default function App() {
           name={'data'}
           children={(field) => (
             <field.TextField
+              showLabel={false}
               onSubmitEditing={form.handleSubmit}
               blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
             />
