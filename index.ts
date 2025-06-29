@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { createRequestHandler } from '@expo/server';
-import { name } from 'package.json';
+
+import { name } from '~/package.json';
 
 const handler = createRequestHandler(path.join(import.meta.dir, 'dist/server'));
 

@@ -6,12 +6,12 @@ import {
   emailOTP,
   twoFactor,
 } from 'better-auth/plugins';
-import { name as appName } from 'package.json';
 import { ulid } from 'ulidx';
 
 import { sendResetPasswordEmail } from '~/lib/emails/reset-password-email';
 import { sendVerificationEmail } from '~/lib/emails/verification-email';
 import { minPasswordLength, otp, totp } from '~/lib/shared';
+import { name as appName } from '~/package.json';
 
 import { db } from './db';
 

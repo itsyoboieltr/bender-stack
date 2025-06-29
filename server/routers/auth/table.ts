@@ -1,66 +1,76 @@
 import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
-  id: text().primaryKey(),
-  name: text().notNull(),
-  email: text().notNull().unique(),
-  emailVerified: boolean().notNull(),
-  image: text(),
-  createdAt: timestamp().notNull(),
-  updatedAt: timestamp().notNull(),
-  role: text(),
-  banned: boolean(),
-  banReason: text(),
-  banExpires: timestamp(),
-  twoFactorEnabled: boolean(),
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: boolean('email_verified')
+    .$defaultFn(() => false)
+    .notNull(),
+  image: text('image'),
+  createdAt: timestamp('created_at')
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  updatedAt: timestamp('updated_at')
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  role: text('role'),
+  banned: boolean('banned'),
+  banReason: text('ban_reason'),
+  banExpires: timestamp('ban_expires'),
+  twoFactorEnabled: boolean('two_factor_enabled'),
 });
 
 export const session = pgTable('session', {
-  id: text().primaryKey(),
-  expiresAt: timestamp().notNull(),
-  token: text().notNull().unique(),
-  createdAt: timestamp().notNull(),
-  updatedAt: timestamp().notNull(),
-  ipAddress: text(),
-  userAgent: text(),
-  userId: text()
+  id: text('id').primaryKey(),
+  expiresAt: timestamp('expires_at').notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  userId: text('user_id')
     .notNull()
-    .references(() => user.id),
-  impersonatedBy: text(),
+    .references(() => user.id, { onDelete: 'cascade' }),
+  impersonatedBy: text('impersonated_by'),
 });
 
 export const account = pgTable('account', {
-  id: text().primaryKey(),
-  accountId: text().notNull(),
-  providerId: text().notNull(),
-  userId: text()
+  id: text('id').primaryKey(),
+  accountId: text('account_id').notNull(),
+  providerId: text('provider_id').notNull(),
+  userId: text('user_id')
     .notNull()
-    .references(() => user.id),
-  accessToken: text(),
-  refreshToken: text(),
-  idToken: text(),
-  accessTokenExpiresAt: timestamp(),
-  refreshTokenExpiresAt: timestamp(),
-  scope: text(),
-  password: text(),
-  createdAt: timestamp().notNull(),
-  updatedAt: timestamp().notNull(),
+    .references(() => user.id, { onDelete: 'cascade' }),
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  idToken: text('id_token'),
+  accessTokenExpiresAt: timestamp('access_token_expires_at'),
+  refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+  scope: text('scope'),
+  password: text('password'),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
 });
 
 export const verification = pgTable('verification', {
-  id: text().primaryKey(),
-  identifier: text().notNull(),
-  value: text().notNull(),
-  expiresAt: timestamp().notNull(),
-  createdAt: timestamp(),
-  updatedAt: timestamp(),
+  id: text('id').primaryKey(),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').$defaultFn(
+    () => /* @__PURE__ */ new Date()
+  ),
+  updatedAt: timestamp('updated_at').$defaultFn(
+    () => /* @__PURE__ */ new Date()
+  ),
 });
 
 export const twoFactor = pgTable('two_factor', {
-  id: text().primaryKey(),
-  secret: text().notNull(),
-  backupCodes: text().notNull(),
-  userId: text()
+  id: text('id').primaryKey(),
+  secret: text('secret').notNull(),
+  backupCodes: text('backup_codes').notNull(),
+  userId: text('user_id')
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: 'cascade' }),
 });
