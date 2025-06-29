@@ -3,8 +3,13 @@ import { z } from 'zod/v4';
 import { minPasswordLength, otp } from '~/lib/shared';
 
 export const userSignInSchema = z.object({
-  email: z.email().trim().min(1),
-  password: z.string().trim().min(minPasswordLength),
+  email: z.email().trim().min(1, { error: 'Email cannot be empty' }),
+  password: z
+    .string()
+    .trim()
+    .min(minPasswordLength, {
+      error: `Password must be minimum ${minPasswordLength} characters long`,
+    }),
 });
 
 export type UserSignIn = z.infer<typeof userSignInSchema>;
@@ -15,9 +20,14 @@ export const createDefaultUserSignIn = (): UserSignIn => ({
 });
 
 export const userSignUpSchema = z.object({
-  name: z.string().trim().min(1),
-  email: z.email().trim().min(1),
-  password: z.string().trim().min(minPasswordLength),
+  name: z.string().trim().min(1, { error: 'Name cannot be empty' }),
+  email: z.email().trim().min(1, { error: 'Email cannot be empty' }),
+  password: z
+    .string()
+    .trim()
+    .min(minPasswordLength, {
+      error: `Password must be minimum ${minPasswordLength} characters long`,
+    }),
 });
 
 export type UserSignUp = z.infer<typeof userSignUpSchema>;
@@ -29,16 +39,29 @@ export const createDefaultUserSignUp = (): UserSignUp => ({
 });
 
 export const userForgotPasswordSchema = z.object({
-  email: z.email().trim().min(1),
+  email: z.email().trim().min(1, { error: 'Email cannot be empty' }),
 });
 
 export const userResetPasswordSchema = z
   .object({
     step: z.union([z.literal('email'), z.literal('otp'), z.literal('reset')]),
-    email: z.email().trim().min(1),
-    otp: z.string().trim().length(otp.otpLength),
-    password: z.string().trim().min(minPasswordLength),
-    passwordConfirm: z.string().trim().min(minPasswordLength),
+    email: z.email().trim().min(1, { error: 'Email cannot be empty' }),
+    otp: z
+      .string()
+      .trim()
+      .length(otp.otpLength, { error: `OTP must be ${otp.otpLength} digits` }),
+    password: z
+      .string()
+      .trim()
+      .min(minPasswordLength, {
+        error: `Password must be minimum ${minPasswordLength} characters long`,
+      }),
+    passwordConfirm: z
+      .string()
+      .trim()
+      .min(minPasswordLength, {
+        error: `Password must be minimum ${minPasswordLength} characters long`,
+      }),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: 'Passwords must match',
@@ -61,7 +84,12 @@ export const userEnableTwoFactorSchema = z.object({
     z.literal('scan'),
     z.literal('verify'),
   ]),
-  password: z.string().trim().min(minPasswordLength),
+  password: z
+    .string()
+    .trim()
+    .min(minPasswordLength, {
+      error: `Password must be minimum ${minPasswordLength} characters long`,
+    }),
   totpURI: z.string().trim(),
 });
 

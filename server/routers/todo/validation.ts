@@ -4,8 +4,8 @@ import type { z } from 'zod/v4';
 import { todo } from './table';
 
 export const todoSchema = createSelectSchema(todo, {
-  id: (schema) => schema.trim().min(1),
-  data: (schema) => schema.trim().min(1),
+  id: (schema) => schema.trim().min(1, { error: 'Id cannot be empty' }),
+  data: (schema) => schema.trim().min(1, { error: 'Data cannot be empty' }),
 });
 
 export type Todo = z.infer<typeof todoSchema>;

@@ -29,5 +29,12 @@
   "verifyEmailText": "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {{count}} minutes.",
   "ifYouDoNotWantToVerifyYourEmail": "If you do not want to verify your email or did not request this, just ignore and delete this message.",
   "You are not authorized to access this resource": "You are not authorized to access this resource",
-  "Passwords must match": "Passwords must match"
+  "Passwords must match": "Passwords must match",
+  "Invalid email or password": "Invalid email or password",
+  "Email cannot be empty": "Email cannot be empty",
+  "Name cannot be empty": "Name cannot be empty",
+  "Password must be minimum 8 characters long": "Password must be minimum 8 characters long",
+  "OTP must be 6 digits": "OTP must be 6 digits",
+  "Id cannot be empty": "Id cannot be empty",
+  "Data cannot be empty": "Data cannot be empty"
 }
