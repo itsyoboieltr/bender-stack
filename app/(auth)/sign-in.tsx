@@ -2,9 +2,9 @@ import { type UseMutationResult, useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import TwoFactorTOTP from '~/components/two-factor-totp';
-import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { useAppForm } from '~/lib/form';
 import { auth } from '~/lib/utils';
@@ -68,7 +68,18 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
   const form = useAppForm({
     defaultValues: createDefaultUserSignIn(),
     validators: { onSubmit: userSignInSchema },
-    onSubmit: ({ value }) => props.signIn.mutate(value),
+    onSubmit: async ({ value }) => {
+      try {
+        await props.signIn.mutateAsync(value);
+      } catch (error) {
+        if (Error.isError(error))
+          Toast.show({
+            type: 'error',
+            text1: t('error'),
+            text2: t(error.message),
+          });
+      }
+    },
   });
 
   if (props.session.isPending) return <ActivityIndicator className={'mt-10'} />;
@@ -76,21 +87,22 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
       <Text className={'font-semibold'}>{t('signIn')}</Text>
-      <form.AppField name={'email'} children={(field) => <field.TextField />} />
-      <form.AppField
-        name={'password'}
-        children={(field) => (
-          <field.TextField
-            onSubmitEditing={form.handleSubmit}
-            secureTextEntry
-          />
-        )}
-      />
-      <Button
-        loading={props.signIn.isPending || props.signIn.isSuccess}
-        onPress={form.handleSubmit}>
-        <Text>{t('signIn')}</Text>
-      </Button>
+      <form.AppForm>
+        <form.AppField
+          name={'email'}
+          children={(field) => <field.TextField />}
+        />
+        <form.AppField
+          name={'password'}
+          children={(field) => (
+            <field.TextField
+              onSubmitEditing={form.handleSubmit}
+              secureTextEntry
+            />
+          )}
+        />
+        <form.SubmitButton label={t('signIn')} />
+      </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text numberOfLines={1}>{t('noAccountYet')}</Text>
         <Link href={'/sign-up'} asChild>

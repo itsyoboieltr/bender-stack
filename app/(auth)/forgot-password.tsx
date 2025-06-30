@@ -6,7 +6,6 @@ import { ActivityIndicator, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import EmailOTP from '~/components/email-otp';
-import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { useAppForm } from '~/lib/form';
 import { auth } from '~/lib/utils';
@@ -61,26 +60,34 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
   const form = useAppForm({
     defaultValues: { email: props.user.email },
     validators: { onSubmit: userForgotPasswordSchema },
-    onSubmit: ({ value }) =>
-      sendVerificationOtp.mutate({
-        email: value.email,
-        type: 'forget-password',
-      }),
+    onSubmit: async ({ value }) => {
+      try {
+        await sendVerificationOtp.mutateAsync({
+          email: value.email,
+          type: 'forget-password',
+        });
+      } catch (error) {
+        if (Error.isError(error))
+          Toast.show({
+            type: 'error',
+            text1: t('error'),
+            text2: t(error.message),
+          });
+      }
+    },
   });
 
   return (
     <>
-      <form.AppField
-        name={'email'}
-        children={(field) => (
-          <field.TextField onSubmitEditing={form.handleSubmit} />
-        )}
-      />
-      <Button
-        loading={sendVerificationOtp.isPending}
-        onPress={form.handleSubmit}>
-        <Text>{t('continue')}</Text>
-      </Button>
+      <form.AppForm>
+        <form.AppField
+          name={'email'}
+          children={(field) => (
+            <field.TextField onSubmitEditing={form.handleSubmit} />
+          )}
+        />
+        <form.SubmitButton label={t('continue')} />
+      </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Link href={'/sign-in'} asChild>
           <Text
@@ -141,30 +148,41 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
   const form = useAppForm({
     defaultValues: props.user,
     validators: { onSubmit: userResetPasswordSchema },
-    onSubmit: ({ value }) => resetPassword.mutate(value),
+    onSubmit: async ({ value }) => {
+      try {
+        await resetPassword.mutateAsync(value);
+      } catch (error) {
+        if (Error.isError(error))
+          Toast.show({
+            type: 'error',
+            text1: t('error'),
+            text2: t(error.message),
+          });
+      }
+    },
   });
 
   return (
     <>
-      <form.AppField
-        name={'password'}
-        children={(field) => (
-          <field.TextField label={t('newPassword')} secureTextEntry />
-        )}
-      />
-      <form.AppField
-        name={'passwordConfirm'}
-        children={(field) => (
-          <field.TextField
-            label={t('confirmNewPassword')}
-            onSubmitEditing={form.handleSubmit}
-            secureTextEntry
-          />
-        )}
-      />
-      <Button loading={resetPassword.isPending} onPress={form.handleSubmit}>
-        <Text>{t('submit')}</Text>
-      </Button>
+      <form.AppForm>
+        <form.AppField
+          name={'password'}
+          children={(field) => (
+            <field.TextField label={t('newPassword')} secureTextEntry />
+          )}
+        />
+        <form.AppField
+          name={'passwordConfirm'}
+          children={(field) => (
+            <field.TextField
+              label={t('confirmNewPassword')}
+              onSubmitEditing={form.handleSubmit}
+              secureTextEntry
+            />
+          )}
+        />
+        <form.SubmitButton />
+      </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
           className={

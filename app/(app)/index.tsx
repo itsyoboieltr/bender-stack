@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Platform, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import Todo from '~/components/todo';
 import { Button } from '~/components/ui/button';
@@ -35,7 +36,18 @@ export default function App() {
   const form = useAppForm({
     defaultValues: createDefaultTodo(),
     validators: { onSubmit: todoInsertSchema },
-    onSubmit: ({ value }) => todoAdd.mutate(value),
+    onSubmit: async ({ value }) => {
+      try {
+        await todoAdd.mutateAsync(value);
+      } catch (error) {
+        if (Error.isError(error))
+          Toast.show({
+            type: 'error',
+            text1: t('error'),
+            text2: t(error.message),
+          });
+      }
+    },
   });
 
   const signOut = useMutation({
@@ -60,19 +72,21 @@ export default function App() {
         ))}
       </View>
       <View className={'flex flex-row justify-center gap-4'}>
-        <form.AppField
-          name={'data'}
-          children={(field) => (
-            <field.TextField
-              showLabel={false}
-              onSubmitEditing={form.handleSubmit}
-              blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
-            />
-          )}
-        />
-        <Button loading={todoAdd.isPending} onPress={form.handleSubmit}>
-          <Text>{t('submit')}</Text>
-        </Button>
+        <form.AppForm>
+          <form.AppField
+            name={'data'}
+            children={(field) => (
+              <field.TextField
+                showLabel={false}
+                onSubmitEditing={form.handleSubmit}
+                blurOnSubmit={
+                  Platform.OS === 'android' || Platform.OS === 'ios'
+                }
+              />
+            )}
+          />
+          <form.SubmitButton />
+        </form.AppForm>
       </View>
       <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
       <Button

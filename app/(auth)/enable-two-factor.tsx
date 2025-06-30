@@ -4,6 +4,7 @@ import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import QRCode from 'react-qr-code';
 
 import TwoFactorTOTPSection from '~/components/two-factor-totp';
@@ -63,7 +64,18 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
   const form = useAppForm({
     defaultValues: props.user,
     validators: { onSubmit: userEnableTwoFactorSchema },
-    onSubmit: ({ value }) => enableTwoFactor.mutate(value),
+    onSubmit: async ({ value }) => {
+      try {
+        await enableTwoFactor.mutateAsync(value);
+      } catch (error) {
+        if (Error.isError(error))
+          Toast.show({
+            type: 'error',
+            text1: t('error'),
+            text2: t(error.message),
+          });
+      }
+    },
   });
 
   const signOut = useMutation({
@@ -75,18 +87,18 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
 
   return (
     <>
-      <form.AppField
-        name={'password'}
-        children={(field) => (
-          <field.TextField
-            onSubmitEditing={form.handleSubmit}
-            secureTextEntry
-          />
-        )}
-      />
-      <Button loading={enableTwoFactor.isPending} onPress={form.handleSubmit}>
-        <Text>{t('continue')}</Text>
-      </Button>
+      <form.AppForm>
+        <form.AppField
+          name={'password'}
+          children={(field) => (
+            <field.TextField
+              onSubmitEditing={form.handleSubmit}
+              secureTextEntry
+            />
+          )}
+        />
+        <form.SubmitButton label={t('continue')} />
+      </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
           className={
