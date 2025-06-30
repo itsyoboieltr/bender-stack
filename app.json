@@ -8,11 +8,7 @@
       "output": "server",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router",
-      "expo-localization",
-      "expo-secure-store"
-    ],
+    "plugins": ["expo-router", "expo-localization", "expo-secure-store"],
     "name": "bender-stack",
     "slug": "bender-stack"
   }
