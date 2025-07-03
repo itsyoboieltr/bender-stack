@@ -77,7 +77,7 @@ bun db:migrate
 
 ## Environment variables ([.env](.env.example))
 
-- `APP_PORT`: port that the application runs on.
+- `PORT`: port that the application runs on.
 
 - `EXPO_PUBLIC_HOST_URL`: host URL for the application.
 

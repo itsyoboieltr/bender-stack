@@ -22,3 +22,5 @@ start-postgres:
 	bun db:seed
 stop-postgres:
 	docker compose -f docker-compose.dev.yml down -v postgres
+exec:
+	docker exec -it bender-stack-app-1 sh

@@ -3,7 +3,7 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'pg_isready']
+      test: pg_isready
       interval: 3s
       timeout: 1s
       retries: 3
@@ -11,38 +11,13 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      # used by pg_isready
       PGUSER: ${POSTGRES_USER}
       PGDATABASE: ${POSTGRES_DB}
+      PGPORT: ${POSTGRES_PORT}
     volumes:
       - postgres:/var/lib/postgresql/data
     labels:
       - docker-volume-backup.archive-pre=/bin/sh -c 'mkdir -p /var/lib/postgresql/data/backup && pg_dump > /var/lib/postgresql/data/backup/dump.sql'
-
-  app:
-    image: bender/app:latest
-    restart: unless-stopped
-    build:
-      context: .
-      args:
-        EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL}
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - ${APP_PORT:-3000}:3000
-    environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
-      SMTP_USERNAME: ${SMTP_USERNAME}
-      SMTP_PASSWORD: ${SMTP_PASSWORD}
 
   backup:
     image: offen/docker-volume-backup:v2
@@ -60,6 +35,32 @@ services:
       - postgres:/postgres:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${POSTGRES_BACKUP_PATH}/${COMPOSE_PROJECT_NAME}:/archive
+
+  app:
+    image: bender/app:latest
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
 
 volumes:
   postgres:
