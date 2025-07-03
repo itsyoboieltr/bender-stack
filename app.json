@@ -9,6 +9,11 @@
       "bundler": "metro"
     },
     "plugins": ["expo-router", "expo-localization", "expo-secure-store"],
+    "ios": {
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
     "name": "bender-stack",
     "slug": "bender-stack"
   }
