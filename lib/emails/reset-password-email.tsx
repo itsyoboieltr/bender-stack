@@ -9,12 +9,10 @@ import {
   Text,
 } from '@react-email/components';
 import type { emailOTP } from 'better-auth/plugins';
-import i18n from 'i18next';
 
 import { serverEnv } from '~/lib/env/server';
 import { otp, type SupportedLanguage } from '~/lib/shared';
 import { transporter } from '~/server/email';
-import { getLanguageFromRequest } from '~/server/i18n';
 
 type SendVerificationOTP = Parameters<
   typeof emailOTP
@@ -24,11 +22,11 @@ export const sendResetPasswordEmail: SendVerificationOTP = async (
   data,
   request
 ) => {
-  const lng = getLanguageFromRequest(request);
+  const lng = 'en';
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
     to: data.email,
-    subject: i18n.t('resetYourPassword', { lng }),
+    subject: 'Reset your password',
     html: await render(<ResetPasswordEmail data={data} lng={lng} />),
   });
 };
@@ -54,21 +52,20 @@ export default function ResetPasswordEmail({
   return (
     <Html>
       <Head />
-      <Preview>{i18n.t('resetYourPassword', { lng })}</Preview>
+      <Preview>Reset your password</Preview>
       <Body>
         <Container>
-          <Heading style={heading}>
-            {i18n.t('resetYourPassword', { lng })}
-          </Heading>
+          <Heading style={heading}>Reset your password</Heading>
           <Text style={text}>
-            {i18n.t('resetYourPasswordText', {
-              count: otp.expiresIn / 60,
-              lng,
-            })}
+            Someone recently requested a password change for your account. If
+            this was you, you can set a new password by entering the following
+            code when prompted. This code will expire in {otp.expiresIn / 60}{' '}
+            minutes.
           </Text>
           <Text style={code}>{data.otp}</Text>
           <Text style={text}>
-            {i18n.t('ifYouDoNotWantToChangeYourPassword', { lng })}
+            If you do not want to change your password or did not request this,
+            just ignore and delete this message.
           </Text>
         </Container>
       </Body>

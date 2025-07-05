@@ -1,7 +1,5 @@
 import type { emailOTP, twoFactor } from 'better-auth/plugins';
 
-import en from '~/assets/locales/en.json';
-
 export const minPasswordLength = 8;
 
 export const otp = {
@@ -16,7 +14,7 @@ export const totp = {
 >['totpOptions'];
 
 export const resources = {
-  en: { translation: en },
+  en: {},
 };
 
 export type SupportedLanguage = keyof typeof resources;

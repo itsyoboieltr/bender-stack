@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -17,7 +16,6 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function ForgotPassword() {
-  const { t } = useTranslation();
   const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserResetPassword());
 
@@ -26,7 +24,7 @@ export default function ForgotPassword() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>{t('forgotPassword')}</Text>
+      <Text className={'font-semibold'}>Forgot password</Text>
       {user.step === 'email' ? (
         <ForgotPasswordEmailStep user={user} setUser={setUser} />
       ) : user.step === 'otp' ? (
@@ -44,8 +42,6 @@ interface ForgotPasswordStepProps {
 }
 
 function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
-  const { t } = useTranslation();
-
   const sendVerificationOtp = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0]
@@ -68,11 +64,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
         });
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({
-            type: 'error',
-            text1: t('error'),
-            text2: t(error.message),
-          });
+          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
       }
     },
   });
@@ -86,7 +78,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
             <field.TextField onSubmitEditing={form.handleSubmit} />
           )}
         />
-        <form.SubmitButton label={t('continue')} />
+        <form.SubmitButton label={'Continue'} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Link href={'/sign-in'} asChild>
@@ -94,7 +86,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            {t('back')}
+            Back
           </Text>
         </Link>
       </View>
@@ -103,7 +95,6 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
 }
 
 function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
-  const { t } = useTranslation();
   return (
     <>
       <EmailOTP
@@ -117,7 +108,7 @@ function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'email' })}>
-          {t('back')}
+          Back
         </Text>
       </View>
     </>
@@ -125,7 +116,6 @@ function ForgotPasswordOTPStep(props: ForgotPasswordStepProps) {
 }
 
 function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
-  const { t } = useTranslation();
   const router = useRouter();
 
   const resetPassword = useMutation({
@@ -138,8 +128,8 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
     onSuccess: () => {
       Toast.show({
         type: 'success',
-        text1: t('success'),
-        text2: t('yourPasswordWasSuccessfullyReset'),
+        text1: 'Success',
+        text2: 'Your password was successfully reset',
       });
       router.replace('/sign-in');
     },
@@ -153,11 +143,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
         await resetPassword.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({
-            type: 'error',
-            text1: t('error'),
-            text2: t(error.message),
-          });
+          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
       }
     },
   });
@@ -168,14 +154,14 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
         <form.AppField
           name={'password'}
           children={(field) => (
-            <field.TextField label={t('newPassword')} secureTextEntry />
+            <field.TextField label={'New password'} secureTextEntry />
           )}
         />
         <form.AppField
           name={'passwordConfirm'}
           children={(field) => (
             <field.TextField
-              label={t('confirmNewPassword')}
+              label={'Confirm new password'}
               onSubmitEditing={form.handleSubmit}
               secureTextEntry
             />
@@ -189,7 +175,7 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'otp' })}>
-          {t('back')}
+          Back
         </Text>
       </View>
     </>

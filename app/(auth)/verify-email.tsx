@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 
 import EmailOTPSection from '~/components/email-otp';
@@ -8,7 +7,6 @@ import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 
 export default function VerifyEmail() {
-  const { t } = useTranslation();
   const session = auth.useSession();
   const verifyEmail = useMutation({
     mutationFn: async (
@@ -37,7 +35,7 @@ export default function VerifyEmail() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>{t('verifyEmail')}</Text>
+      <Text className={'font-semibold'}>Verify your email address</Text>
       <EmailOTPSection
         onComplete={(otp) => {
           if (!session.data) return;
@@ -50,7 +48,7 @@ export default function VerifyEmail() {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => signOut.mutate()}>
-          {t('back')}
+          Back
         </Text>
       </View>
     </View>

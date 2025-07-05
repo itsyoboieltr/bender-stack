@@ -1,6 +1,5 @@
 import { type UseMutationResult, useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -64,7 +63,6 @@ interface SignInStepProps {
 }
 
 function SignInEmailAndPasswordStep(props: SignInStepProps) {
-  const { t } = useTranslation();
   const form = useAppForm({
     defaultValues: createDefaultUserSignIn(),
     validators: { onSubmit: userSignInSchema },
@@ -73,11 +71,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
         await props.signIn.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({
-            type: 'error',
-            text1: t('error'),
-            text2: t(error.message),
-          });
+          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
       }
     },
   });
@@ -86,7 +80,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>{t('signIn')}</Text>
+      <Text className={'font-semibold'}>Sign in</Text>
       <form.AppForm>
         <form.AppField
           name={'email'}
@@ -101,16 +95,16 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
             />
           )}
         />
-        <form.SubmitButton label={t('signIn')} />
+        <form.SubmitButton label={'Sign in'} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>{t('noAccountYet')}</Text>
+        <Text numberOfLines={1}>No account yet?</Text>
         <Link href={'/sign-up'} asChild>
           <Text
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            {t('signUp')}
+            Sign up
           </Text>
         </Link>
       </View>
@@ -120,7 +114,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            {t('forgotPassword')}
+            Forgot password
           </Text>
         </Link>
       </View>
@@ -129,7 +123,6 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
 }
 
 function SignInTwoFactorStep(props: SignInStepProps) {
-  const { t } = useTranslation();
   const verifyTotp = useMutation({
     mutationFn: async (
       data: Parameters<typeof auth.twoFactor.verifyTotp>[0]
@@ -141,7 +134,7 @@ function SignInTwoFactorStep(props: SignInStepProps) {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>{t('signIn')}</Text>
+      <Text className={'font-semibold'}>Sign in</Text>
       <TwoFactorTOTP onComplete={(code) => verifyTotp.mutate({ code })} />
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
@@ -149,7 +142,7 @@ function SignInTwoFactorStep(props: SignInStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.signIn.reset()}>
-          {t('back')}
+          Back
         </Text>
       </View>
     </View>

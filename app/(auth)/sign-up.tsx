@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -14,7 +13,6 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function SignUp() {
-  const { t } = useTranslation();
   const session = auth.useSession();
 
   const signUp = useMutation({
@@ -39,11 +37,7 @@ export default function SignUp() {
         await signUp.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({
-            type: 'error',
-            text1: t('error'),
-            text2: t(error.message),
-          });
+          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
       }
     },
   });
@@ -53,7 +47,7 @@ export default function SignUp() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>{t('signUp')}</Text>
+      <Text className={'font-semibold'}>Sign up</Text>
       <form.AppForm>
         <form.AppField
           name={'email'}
@@ -72,16 +66,16 @@ export default function SignUp() {
             />
           )}
         />
-        <form.SubmitButton label={t('signUp')} />
+        <form.SubmitButton label={'Sign up'} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>{t('alreadyHaveAnAccount')}</Text>
+        <Text numberOfLines={1}>Already have an account?</Text>
         <Link href={'/sign-in'} asChild>
           <Text
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            {t('signIn')}
+            Sign in
           </Text>
         </Link>
       </View>

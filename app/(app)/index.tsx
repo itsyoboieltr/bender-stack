@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Platform, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -15,7 +14,6 @@ import {
 } from '~/server/routers/todo/validation';
 
 export default function App() {
-  const { t } = useTranslation();
   const session = auth.useSession();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -41,11 +39,7 @@ export default function App() {
         await todoAdd.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({
-            type: 'error',
-            text1: t('error'),
-            text2: t(error.message),
-          });
+          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
       }
     },
   });
@@ -92,7 +86,7 @@ export default function App() {
       <Button
         loading={signOut.isPending || signOut.isSuccess}
         onPress={() => signOut.mutate()}>
-        <Text>{t('signOut')}</Text>
+        <Text>Sign out</Text>
       </Button>
     </View>
   );

@@ -9,12 +9,10 @@ import {
   Text,
 } from '@react-email/components';
 import type { emailOTP } from 'better-auth/plugins';
-import i18n from 'i18next';
 
 import { serverEnv } from '~/lib/env/server';
 import { otp, type SupportedLanguage } from '~/lib/shared';
 import { transporter } from '~/server/email';
-import { getLanguageFromRequest } from '~/server/i18n';
 
 type SendVerificationOTP = Parameters<
   typeof emailOTP
@@ -24,11 +22,11 @@ export const sendVerificationEmail: SendVerificationOTP = async (
   data,
   request
 ) => {
-  const lng = getLanguageFromRequest(request);
+  const lng = 'en';
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
     to: data.email,
-    subject: i18n.t('verifyEmail', { lng }),
+    subject: 'Verify your email address',
     html: await render(<VerificationEmail data={data} lng={lng} />),
   });
 };
@@ -54,16 +52,19 @@ export default function VerificationEmail({
   return (
     <Html>
       <Head />
-      <Preview>{i18n.t('verifyEmail', { lng })}</Preview>
+      <Preview>Verify your email address</Preview>
       <Body>
         <Container>
-          <Heading style={heading}>{i18n.t('verifyEmail', { lng })}</Heading>
+          <Heading style={heading}>Verify your email address</Heading>
           <Text style={text}>
-            {i18n.t('verifyEmailText', { count: otp.expiresIn / 60, lng })}
+            We want to make sure it's really you. Please enter the following
+            code when prompted. This code will expire in {otp.expiresIn / 60}{' '}
+            minutes
           </Text>
           <Text style={code}>{data.otp}</Text>
           <Text style={text}>
-            {i18n.t('ifYouDoNotWantToVerifyYourEmail', { lng })}
+            If you do not want to verify your email or did not request this,
+            just ignore and delete this message.
           </Text>
         </Container>
       </Body>

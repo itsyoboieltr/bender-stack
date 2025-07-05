@@ -43,7 +43,6 @@
     "expo-secure-store": "~14.2.3",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
-    "i18next": "25.2.1",
     "input-otp-native": "0.4.0",
     "lucide-react-native": "0.525.0",
     "nativewind": "4.1.23",
@@ -51,7 +50,6 @@
     "postgres": "3.4.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-i18next": "15.5.3",
     "react-native": "0.79.4",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
@@ -68,12 +66,12 @@
   },
   "devDependencies": {
     "@babel/core": "7.27.7",
+    "@biomejs/biome": "2.0.6",
     "@types/bun": "1.2.17",
     "@types/nodemailer": "6.4.17",
     "@types/react": "~19.0.10",
     "react-email": "4.0.17",
-    "typescript": "~5.8.3",
-    "@biomejs/biome": "2.0.6"
+    "typescript": "~5.8.3"
   },
   "expo": {
     "doctor": {

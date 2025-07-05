@@ -12,7 +12,6 @@ import { useColorScheme as useNativewindColorScheme } from 'nativewind';
 import { twMerge } from 'tailwind-merge';
 
 import { clientEnv } from '~/lib/env/client';
-import { getLanguageFromStorage } from '~/lib/i18n';
 import type { AppRouter } from '~/server';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
@@ -58,7 +57,7 @@ export const auth = createAuthClient({
   plugins: [adminClient(), emailOTPClient(), twoFactorClient()],
   fetchOptions: {
     onRequest: (context) => {
-      context.headers.set('Accept-Language', getLanguageFromStorage());
+      context.headers.set('Accept-Language', 'en');
     },
   },
 });

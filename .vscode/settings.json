@@ -1,6 +1,4 @@
 {
-  "i18n-ally.localesPaths": ["assets/locales"],
-  "i18n-ally.keystyle": "nested",
   "[javascript]": {
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
