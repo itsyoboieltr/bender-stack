@@ -7,7 +7,7 @@
     "build": "expo export --platform web",
     "start": "bun index.ts",
     "check": "biome check .",
-    "i18n:extract": "lingui extract",
+    "i18n:extract": "lingui extract --overwrite --clean",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "bun seed.ts",
