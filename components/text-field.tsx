@@ -1,4 +1,3 @@
-import { useLingui } from '@lingui/react/macro';
 import type { ComponentProps } from 'react';
 import { View } from 'react-native';
 
@@ -12,7 +11,6 @@ interface TextFieldProps extends ComponentProps<typeof Input> {
 }
 
 export function TextField({ label, ...props }: TextFieldProps) {
-  const { t } = useLingui();
   const field = useFieldContext<string>();
   return (
     <View className={'flex flex-col gap-1 w-60'}>
@@ -26,10 +24,9 @@ export function TextField({ label, ...props }: TextFieldProps) {
         {...props}
       />
       {!field.state.meta.isValid && (
-        <Text
-          className={
-            'text-sm text-red-400'
-          }>{t`${field.state.meta.errors[0]?.message}`}</Text>
+        <Text className={'text-sm text-red-400'}>
+          {field.state.meta.errors[0]?.message}
+        </Text>
       )}
     </View>
   );

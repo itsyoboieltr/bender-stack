@@ -1,13 +1,20 @@
-import { t } from '@lingui/core/macro';
+import { setupI18n } from '@lingui/core';
+import { msg } from '@lingui/core/macro';
 import { initTRPC, TRPCError } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod/v4';
+
+import { getLocaleFromRequest } from '~/server/utils';
 
 import { auth } from './auth';
 
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
   const session = await auth.api.getSession({ headers: opts.req.headers });
-  return { auth: session };
+  const i18n = setupI18n({
+    locale: getLocaleFromRequest(opts.req),
+    messages: { en: require('~/locales/en/messages.po') },
+  });
+  return { auth: session, i18n };
 };
 
 export const { router, procedure, middleware } = initTRPC
@@ -28,7 +35,7 @@ const isAuthed = middleware(({ next, ctx }) => {
   if (!ctx.auth) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: t`You are not authorized to access this resource`,
+      message: ctx.i18n.t(msg`You are not authorized to access this resource`),
     });
   }
   return next({ ctx: { ...ctx, auth: ctx.auth } });

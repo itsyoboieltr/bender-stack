@@ -64,7 +64,7 @@ export const getLocale = () => {
     .filter((locale) => locale !== null);
 
   const deviceLocale = new Negotiator({
-    headers: { 'Accept-Language': locales.join(', ') },
+    headers: { 'accept-language': locales.join(', ') },
   }).language([...supportedLocales]) as SupportedLocale | undefined;
 
   const defaultLocale = deviceLocale ?? fallbackLocale;

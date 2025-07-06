@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2025-07-06 13:52+0400\n"
+"POT-Creation-Date: 2025-07-06 14:48+0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,6 @@ msgstr ""
 
 #. placeholder {0}: e.message
 #. placeholder {0}: error.message
-#. placeholder {0}: field.state.meta.errors[0]?.message
 #: app/_layout.tsx:73
 #: app/_layout.tsx:77
 #: app/(auth)/sign-up.tsx:42
@@ -18,7 +17,6 @@ msgstr ""
 #: app/(auth)/forgot-password.tsx:145
 #: app/(auth)/enable-two-factor.tsx:69
 #: app/(app)/index.tsx:44
-#: components/text-field.tsx:32
 msgid "{0}"
 msgstr "{0}"
 
@@ -61,10 +59,10 @@ msgstr "Data cannot be empty"
 msgid "Email"
 msgstr "Email"
 
-#: server/routers/auth/validation.ts:7
-#: server/routers/auth/validation.ts:25
-#: server/routers/auth/validation.ts:43
-#: server/routers/auth/validation.ts:49
+#: server/routers/auth/validation.ts:10
+#: server/routers/auth/validation.ts:34
+#: server/routers/auth/validation.ts:55
+#: server/routers/auth/validation.ts:64
 msgid "Email cannot be empty"
 msgstr "Email cannot be empty"
 
@@ -104,7 +102,7 @@ msgstr "If you do not want to verify your email or did not request this, just ig
 msgid "Name"
 msgstr "Name"
 
-#: server/routers/auth/validation.ts:24
+#: server/routers/auth/validation.ts:30
 msgid "Name cannot be empty"
 msgstr "Name cannot be empty"
 
@@ -125,7 +123,7 @@ msgid "Open your authenticator app and scan the QR code to set up two-factor aut
 msgstr "Open your authenticator app and scan the QR code to set up two-factor authentication on your device."
 
 #. placeholder {0}: otp.otpLength
-#: server/routers/auth/validation.ts:53
+#: server/routers/auth/validation.ts:69
 msgid "OTP must be {0} digits"
 msgstr "OTP must be {0} digits"
 
@@ -135,15 +133,15 @@ msgstr "OTP must be {0} digits"
 msgid "Password"
 msgstr "Password"
 
-#: server/routers/auth/validation.ts:12
-#: server/routers/auth/validation.ts:30
-#: server/routers/auth/validation.ts:58
-#: server/routers/auth/validation.ts:64
-#: server/routers/auth/validation.ts:88
+#: server/routers/auth/validation.ts:15
+#: server/routers/auth/validation.ts:39
+#: server/routers/auth/validation.ts:76
+#: server/routers/auth/validation.ts:83
+#: server/routers/auth/validation.ts:107
 msgid "Password must be minimum {minPasswordLength} characters long"
 msgstr "Password must be minimum {minPasswordLength} characters long"
 
-#: server/routers/auth/validation.ts:68
+#: server/routers/auth/validation.ts:87
 msgid "Passwords must match"
 msgstr "Passwords must match"
 
@@ -206,7 +204,7 @@ msgstr "We want to make sure it's really you. Please enter the following code wh
 msgid "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
 msgstr "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
 
-#: server/trpc.ts:31
+#: server/trpc.ts:38
 msgid "You are not authorized to access this resource"
 msgstr "You are not authorized to access this resource"
 
