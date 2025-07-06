@@ -9,16 +9,10 @@ export const otp = {
 
 export const totp = {
   digits: 6,
-} as const satisfies NonNullable<
-  Parameters<typeof twoFactor>[0]
->['totpOptions'];
+} as const satisfies NonNullable<Parameters<typeof twoFactor>[0]>['totpOptions'];
 
-export const resources = {
-  en: {},
-};
+export const supportedLocales = ['en'] as const;
 
-export type SupportedLanguage = keyof typeof resources;
+export type SupportedLocale = (typeof supportedLocales)[number];
 
-export const supportedLngs = Object.keys(resources) as [SupportedLanguage];
-
-export const fallbackLocale = 'en' satisfies SupportedLanguage;
+export const fallbackLocale = 'en' satisfies SupportedLocale;

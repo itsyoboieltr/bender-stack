@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro';
 import { initTRPC, TRPCError } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod/v4';
@@ -27,7 +28,7 @@ const isAuthed = middleware(({ next, ctx }) => {
   if (!ctx.auth) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: 'You are not authorized to access this resource',
+      message: t`You are not authorized to access this resource`,
     });
   }
   return next({ ctx: { ...ctx, auth: ctx.auth } });

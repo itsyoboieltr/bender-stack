@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { type UseMutationResult, useMutation } from '@tanstack/react-query';
 import { Link, Redirect, useRouter } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
@@ -54,15 +55,12 @@ export default function SignIn() {
 }
 
 interface SignInStepProps {
-  signIn: UseMutationResult<
-    ReturnType<typeof auth.signIn.email>,
-    Error,
-    UserSignIn
-  >;
+  signIn: UseMutationResult<ReturnType<typeof auth.signIn.email>, Error, UserSignIn>;
   session: ReturnType<typeof auth.useSession>;
 }
 
 function SignInEmailAndPasswordStep(props: SignInStepProps) {
+  const { t } = useLingui();
   const form = useAppForm({
     defaultValues: createDefaultUserSignIn(),
     validators: { onSubmit: userSignInSchema },
@@ -71,7 +69,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
         await props.signIn.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
+          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
       }
     },
   });
@@ -80,31 +78,32 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Sign in</Text>
+      <Text className={'font-semibold'}>{t`Sign in`}</Text>
       <form.AppForm>
         <form.AppField
           name={'email'}
-          children={(field) => <field.TextField />}
+          children={(field) => <field.TextField label={t`Email`} />}
         />
         <form.AppField
           name={'password'}
           children={(field) => (
             <field.TextField
+              label={t`Password`}
               onSubmitEditing={form.handleSubmit}
               secureTextEntry
             />
           )}
         />
-        <form.SubmitButton label={'Sign in'} />
+        <form.SubmitButton label={t`Sign in`} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>No account yet?</Text>
+        <Text numberOfLines={1}>{t`No account yet?`}</Text>
         <Link href={'/sign-up'} asChild>
           <Text
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            Sign up
+            {t`Sign up`}
           </Text>
         </Link>
       </View>
@@ -114,7 +113,7 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            Forgot password
+            {t`Forgot password`}
           </Text>
         </Link>
       </View>
@@ -123,10 +122,9 @@ function SignInEmailAndPasswordStep(props: SignInStepProps) {
 }
 
 function SignInTwoFactorStep(props: SignInStepProps) {
+  const { t } = useLingui();
   const verifyTotp = useMutation({
-    mutationFn: async (
-      data: Parameters<typeof auth.twoFactor.verifyTotp>[0]
-    ) => {
+    mutationFn: async (data: Parameters<typeof auth.twoFactor.verifyTotp>[0]) => {
       const response = await auth.twoFactor.verifyTotp(data);
       if (response.error) throw new Error(response.error.message);
     },
@@ -134,7 +132,7 @@ function SignInTwoFactorStep(props: SignInStepProps) {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Sign in</Text>
+      <Text className={'font-semibold'}>{t`Sign in`}</Text>
       <TwoFactorTOTP onComplete={(code) => verifyTotp.mutate({ code })} />
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
@@ -142,7 +140,7 @@ function SignInTwoFactorStep(props: SignInStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.signIn.reset()}>
-          Back
+          {t`Back`}
         </Text>
       </View>
     </View>

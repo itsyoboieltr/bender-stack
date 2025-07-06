@@ -70,7 +70,8 @@
       "semicolons": "always",
       "bracketSameLine": true,
       "quoteStyle": "single",
-      "jsxQuoteStyle": "single"
+      "jsxQuoteStyle": "single",
+      "lineWidth": 85
     }
   },
   "json": { "formatter": { "enabled": true } },

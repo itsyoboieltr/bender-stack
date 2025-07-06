@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { Link, Redirect } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
@@ -13,6 +14,7 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function SignUp() {
+  const { t } = useLingui();
   const session = auth.useSession();
 
   const signUp = useMutation({
@@ -37,7 +39,7 @@ export default function SignUp() {
         await signUp.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
+          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
       }
     },
   });
@@ -47,35 +49,36 @@ export default function SignUp() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Sign up</Text>
+      <Text className={'font-semibold'}>{t`Sign up`}</Text>
       <form.AppForm>
         <form.AppField
           name={'email'}
-          children={(field) => <field.TextField />}
+          children={(field) => <field.TextField label={t`Email`} />}
         />
         <form.AppField
           name={'name'}
-          children={(field) => <field.TextField />}
+          children={(field) => <field.TextField label={t`Name`} />}
         />
         <form.AppField
           name={'password'}
           children={(field) => (
             <field.TextField
+              label={t`Password`}
               onSubmitEditing={form.handleSubmit}
               secureTextEntry
             />
           )}
         />
-        <form.SubmitButton label={'Sign up'} />
+        <form.SubmitButton label={t`Sign up`} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
-        <Text numberOfLines={1}>Already have an account?</Text>
+        <Text numberOfLines={1}>{t`Already have an account?`}</Text>
         <Link href={'/sign-in'} asChild>
           <Text
             className={
               'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
             }>
-            Sign in
+            {t`Sign in`}
           </Text>
         </Link>
       </View>

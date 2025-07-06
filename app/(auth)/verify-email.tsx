@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
@@ -7,11 +8,10 @@ import { Text } from '~/components/ui/text';
 import { auth } from '~/lib/utils';
 
 export default function VerifyEmail() {
+  const { t } = useLingui();
   const session = auth.useSession();
   const verifyEmail = useMutation({
-    mutationFn: async (
-      data: Parameters<typeof auth.emailOtp.verifyEmail>[0]
-    ) => {
+    mutationFn: async (data: Parameters<typeof auth.emailOtp.verifyEmail>[0]) => {
       const response = await auth.emailOtp.verifyEmail(data);
       if (response.error) throw new Error(response.error.message);
     },
@@ -35,7 +35,7 @@ export default function VerifyEmail() {
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Verify your email address</Text>
+      <Text className={'font-semibold'}>{t`Verify your email address`}</Text>
       <EmailOTPSection
         onComplete={(otp) => {
           if (!session.data) return;
@@ -48,7 +48,7 @@ export default function VerifyEmail() {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => signOut.mutate()}>
-          Back
+          {t`Back`}
         </Text>
       </View>
     </View>

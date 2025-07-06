@@ -1,6 +1,7 @@
 import { OTPInput as InputOTP, type OTPInputProps } from 'input-otp-native';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
+import { Text } from '~/components/ui/text';
 import { cn } from '~/lib/utils';
 
 const OTPInput = (props: OTPInputProps) => {

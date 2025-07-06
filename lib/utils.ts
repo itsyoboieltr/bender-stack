@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core';
 import { DefaultTheme, type Theme } from '@react-navigation/native';
 import { createFormHookContexts } from '@tanstack/react-form';
 import { createTRPCContext } from '@trpc/tanstack-react-query';
@@ -8,11 +9,16 @@ import {
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { type ClassValue, clsx } from 'clsx';
+import { getLocales } from 'expo-localization';
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
+import Negotiator from 'negotiator';
 import { twMerge } from 'tailwind-merge';
 
 import { clientEnv } from '~/lib/env/client';
+import { storage } from '~/lib/storage';
 import type { AppRouter } from '~/server';
+
+import { fallbackLocale, type SupportedLocale, supportedLocales } from './shared';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -52,12 +58,43 @@ export const DARK_THEME: Theme = {
   },
 };
 
+export const getLocale = () => {
+  const locales = getLocales()
+    .map((locale) => locale.languageCode)
+    .filter((locale) => locale !== null);
+
+  const deviceLocale = new Negotiator({
+    headers: { 'Accept-Language': locales.join(', ') },
+  }).language([...supportedLocales]) as SupportedLocale | undefined;
+
+  const defaultLocale = deviceLocale ?? fallbackLocale;
+
+  const storedLanguage = storage.get('locale') as SupportedLocale | null;
+
+  const language = storedLanguage
+    ? supportedLocales.includes(storedLanguage)
+      ? storedLanguage
+      : defaultLocale
+    : defaultLocale;
+
+  return language;
+};
+
+export const setLocale = (locale: SupportedLocale) => {
+  if (locale === 'en')
+    i18n.loadAndActivate({
+      locale,
+      messages: require('~/locales/en/messages.po'),
+    });
+  storage.set('locale', locale);
+};
+
 export const auth = createAuthClient({
   baseURL: clientEnv.EXPO_PUBLIC_HOST_URL,
   plugins: [adminClient(), emailOTPClient(), twoFactorClient()],
   fetchOptions: {
     onRequest: (context) => {
-      context.headers.set('Accept-Language', 'en');
+      context.headers.set('Accept-Language', getLocale());
     },
   },
 });

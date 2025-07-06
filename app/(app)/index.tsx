@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Redirect } from 'expo-router';
 import { ActivityIndicator, Platform, View } from 'react-native';
@@ -14,6 +15,7 @@ import {
 } from '~/server/routers/todo/validation';
 
 export default function App() {
+  const { t } = useLingui();
   const session = auth.useSession();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -39,7 +41,7 @@ export default function App() {
         await todoAdd.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
+          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
       }
     },
   });
@@ -53,8 +55,7 @@ export default function App() {
 
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (!session.data) return <Redirect href={'/sign-in'} />;
-  if (!session.data.user.emailVerified)
-    return <Redirect href={'/verify-email'} />;
+  if (!session.data.user.emailVerified) return <Redirect href={'/verify-email'} />;
   if (!session.data.user.twoFactorEnabled)
     return <Redirect href={'/enable-two-factor'} />;
 
@@ -71,22 +72,19 @@ export default function App() {
             name={'data'}
             children={(field) => (
               <field.TextField
-                showLabel={false}
                 onSubmitEditing={form.handleSubmit}
-                blurOnSubmit={
-                  Platform.OS === 'android' || Platform.OS === 'ios'
-                }
+                blurOnSubmit={Platform.OS === 'android' || Platform.OS === 'ios'}
               />
             )}
           />
-          <form.SubmitButton />
+          <form.SubmitButton label={t`Submit`} />
         </form.AppForm>
       </View>
       <Text>Bun + tRPC + NativeWind + Drizzle + Expo + React Native</Text>
       <Button
         loading={signOut.isPending || signOut.isSuccess}
         onPress={() => signOut.mutate()}>
-        <Text>Sign out</Text>
+        <Text>{t`Sign out`}</Text>
       </Button>
     </View>
   );

@@ -1,3 +1,6 @@
+import { i18n } from '@lingui/core';
+import { t } from '@lingui/core/macro';
+import { I18nProvider } from '@lingui/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from '@react-navigation/native';
 import {
@@ -18,15 +21,22 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
+import { Text } from '~/components/ui/text';
 import { clientEnv } from '~/lib/env/client';
 import {
   DARK_THEME,
+  getLocale,
   LIGHT_THEME,
+  setLocale,
   TRPCProvider,
   useColorScheme,
 } from '~/lib/utils';
 import type { AppRouter } from '~/server';
+import '@formatjs/intl-locale/polyfill-force';
+import '@formatjs/intl-pluralrules/polyfill-force';
 import '../global.css';
+
+setLocale(getLocale());
 
 // https://github.com/nativewind/nativewind/issues/1153#issuecomment-2428123382
 configureReanimatedLogger({
@@ -60,11 +70,11 @@ export default function Layout() {
         },
         queryCache: new QueryCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
+            Toast.show({ type: 'error', text1: t`Error`, text2: t`${e.message}` }),
         }),
         mutationCache: new MutationCache({
           onError: (e) =>
-            Toast.show({ type: 'error', text1: 'Error', text2: e.message }),
+            Toast.show({ type: 'error', text1: t`Error`, text2: t`${e.message}` }),
         }),
       })
   );
@@ -111,20 +121,22 @@ export default function Layout() {
 
   return (
     <StrictMode>
-      <ThemeProvider value={colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        <QueryClientProvider client={queryClient}>
-          <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-            <SafeAreaView
-              style={{ flex: 1 }}
-              className={'bg-background'}
-              edges={['top', 'right', 'left']}>
-              <Slot />
-              <Toast position={'bottom'} />
-            </SafeAreaView>
-          </TRPCProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <I18nProvider i18n={i18n} defaultComponent={Text}>
+        <ThemeProvider value={colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME}>
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+          <QueryClientProvider client={queryClient}>
+            <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+              <SafeAreaView
+                style={{ flex: 1 }}
+                className={'bg-background'}
+                edges={['top', 'right', 'left']}>
+                <Slot />
+                <Toast position={'bottom'} />
+              </SafeAreaView>
+            </TRPCProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </I18nProvider>
     </StrictMode>
   );
 }

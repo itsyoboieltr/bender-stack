@@ -14,7 +14,7 @@ export function SubmitButton({ label, ...props }: SubmitButtonProps) {
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
         <Button loading={isSubmitting} onPress={form.handleSubmit} {...props}>
-          <Text>{label ?? 'Submit'}</Text>
+          {label && <Text>{label}</Text>}
         </Button>
       )}
     </form.Subscribe>

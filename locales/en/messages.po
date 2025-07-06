@@ -1,0 +1,215 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-07-06 13:52+0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+
+#. placeholder {0}: e.message
+#. placeholder {0}: error.message
+#. placeholder {0}: field.state.meta.errors[0]?.message
+#: app/_layout.tsx:73
+#: app/_layout.tsx:77
+#: app/(auth)/sign-up.tsx:42
+#: app/(auth)/sign-in.tsx:72
+#: app/(auth)/forgot-password.tsx:70
+#: app/(auth)/forgot-password.tsx:145
+#: app/(auth)/enable-two-factor.tsx:69
+#: app/(app)/index.tsx:44
+#: components/text-field.tsx:32
+msgid "{0}"
+msgstr "{0}"
+
+#: app/(auth)/sign-up.tsx:75
+msgid "Already have an account?"
+msgstr "Already have an account?"
+
+#: app/(auth)/verify-email.tsx:51
+#: app/(auth)/sign-in.tsx:143
+#: app/(auth)/forgot-password.tsx:91
+#: app/(auth)/forgot-password.tsx:111
+#: app/(auth)/forgot-password.tsx:177
+#: app/(auth)/enable-two-factor.tsx:102
+#: app/(auth)/enable-two-factor.tsx:159
+#: app/(auth)/enable-two-factor.tsx:184
+msgid "Back"
+msgstr "Back"
+
+#: app/(auth)/forgot-password.tsx:163
+msgid "Confirm new password"
+msgstr "Confirm new password"
+
+#: app/(auth)/forgot-password.tsx:84
+#: app/(auth)/enable-two-factor.tsx:94
+#: app/(auth)/enable-two-factor.tsx:151
+msgid "Continue"
+msgstr "Continue"
+
+#: app/(auth)/enable-two-factor.tsx:137
+msgid "Copy setup key"
+msgstr "Copy setup key"
+
+#: server/routers/todo/validation.ts:9
+msgid "Data cannot be empty"
+msgstr "Data cannot be empty"
+
+#: app/(auth)/sign-up.tsx:56
+#: app/(auth)/sign-in.tsx:85
+#: app/(auth)/forgot-password.tsx:81
+msgid "Email"
+msgstr "Email"
+
+#: server/routers/auth/validation.ts:7
+#: server/routers/auth/validation.ts:25
+#: server/routers/auth/validation.ts:43
+#: server/routers/auth/validation.ts:49
+msgid "Email cannot be empty"
+msgstr "Email cannot be empty"
+
+#: app/(auth)/enable-two-factor.tsx:33
+msgid "Enable two-factor authentication"
+msgstr "Enable two-factor authentication"
+
+#: app/_layout.tsx:73
+#: app/_layout.tsx:77
+#: app/(auth)/sign-up.tsx:42
+#: app/(auth)/sign-in.tsx:72
+#: app/(auth)/forgot-password.tsx:70
+#: app/(auth)/forgot-password.tsx:145
+#: app/(auth)/enable-two-factor.tsx:69
+#: app/(app)/index.tsx:44
+msgid "Error"
+msgstr "Error"
+
+#: app/(auth)/sign-in.tsx:116
+#: app/(auth)/forgot-password.tsx:29
+msgid "Forgot password"
+msgstr "Forgot password"
+
+#: server/routers/todo/validation.ts:8
+msgid "Id cannot be empty"
+msgstr "Id cannot be empty"
+
+#: lib/emails/reset-password-email.tsx:68
+msgid "If you do not want to change your password or did not request this, just ignore and delete this message."
+msgstr "If you do not want to change your password or did not request this, just ignore and delete this message."
+
+#: lib/emails/verification-email.tsx:68
+msgid "If you do not want to verify your email or did not request this, just ignore and delete this message."
+msgstr "If you do not want to verify your email or did not request this, just ignore and delete this message."
+
+#: app/(auth)/sign-up.tsx:60
+msgid "Name"
+msgstr "Name"
+
+#: server/routers/auth/validation.ts:24
+msgid "Name cannot be empty"
+msgstr "Name cannot be empty"
+
+#: app/(auth)/forgot-password.tsx:156
+msgid "New password"
+msgstr "New password"
+
+#: app/(auth)/sign-in.tsx:100
+msgid "No account yet?"
+msgstr "No account yet?"
+
+#: app/(auth)/enable-two-factor.tsx:148
+msgid "Once it’s all set up, click the button below to verify that everything works."
+msgstr "Once it’s all set up, click the button below to verify that everything works."
+
+#: app/(auth)/enable-two-factor.tsx:125
+msgid "Open your authenticator app and scan the QR code to set up two-factor authentication on your device."
+msgstr "Open your authenticator app and scan the QR code to set up two-factor authentication on your device."
+
+#. placeholder {0}: otp.otpLength
+#: server/routers/auth/validation.ts:53
+msgid "OTP must be {0} digits"
+msgstr "OTP must be {0} digits"
+
+#: app/(auth)/sign-up.tsx:66
+#: app/(auth)/sign-in.tsx:91
+#: app/(auth)/enable-two-factor.tsx:88
+msgid "Password"
+msgstr "Password"
+
+#: server/routers/auth/validation.ts:12
+#: server/routers/auth/validation.ts:30
+#: server/routers/auth/validation.ts:58
+#: server/routers/auth/validation.ts:64
+#: server/routers/auth/validation.ts:88
+msgid "Password must be minimum {minPasswordLength} characters long"
+msgstr "Password must be minimum {minPasswordLength} characters long"
+
+#: server/routers/auth/validation.ts:68
+msgid "Passwords must match"
+msgstr "Passwords must match"
+
+#. placeholder {0}: totp.digits
+#: components/two-factor-totp.tsx:14
+msgid "Please enter the {0} digit code from your authenticator app."
+msgstr "Please enter the {0} digit code from your authenticator app."
+
+#: lib/emails/reset-password-email.tsx:30
+#: lib/emails/reset-password-email.tsx:56
+#: lib/emails/reset-password-email.tsx:59
+msgid "Reset your password"
+msgstr "Reset your password"
+
+#: app/(auth)/sign-up.tsx:81
+#: app/(auth)/sign-in.tsx:81
+#: app/(auth)/sign-in.tsx:97
+#: app/(auth)/sign-in.tsx:135
+msgid "Sign in"
+msgstr "Sign in"
+
+#: app/(app)/index.tsx:87
+msgid "Sign out"
+msgstr "Sign out"
+
+#: app/(auth)/sign-up.tsx:52
+#: app/(auth)/sign-up.tsx:72
+#: app/(auth)/sign-in.tsx:106
+msgid "Sign up"
+msgstr "Sign up"
+
+#. placeholder {0}: otp.expiresIn / 60
+#: lib/emails/reset-password-email.tsx:62
+msgid "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
+msgstr "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
+
+#: app/(auth)/forgot-password.tsx:169
+#: app/(app)/index.tsx:80
+msgid "Submit"
+msgstr "Submit"
+
+#: app/(auth)/forgot-password.tsx:130
+msgid "Success"
+msgstr "Success"
+
+#: app/(auth)/verify-email.tsx:38
+#: lib/emails/verification-email.tsx:30
+#: lib/emails/verification-email.tsx:56
+#: lib/emails/verification-email.tsx:59
+msgid "Verify your email address"
+msgstr "Verify your email address"
+
+#. placeholder {0}: otp.expiresIn / 60
+#: lib/emails/verification-email.tsx:62
+msgid "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {0} minutes"
+msgstr "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {0} minutes"
+
+#. placeholder {0}: otp.otpLength
+#: components/email-otp.tsx:14
+msgid "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
+msgstr "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
+
+#: server/trpc.ts:31
+msgid "You are not authorized to access this resource"
+msgstr "You are not authorized to access this resource"
+
+#: app/(auth)/forgot-password.tsx:131
+msgid "Your password was successfully reset"
+msgstr "Your password was successfully reset"

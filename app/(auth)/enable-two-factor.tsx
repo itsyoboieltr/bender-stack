@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import { Redirect } from 'expo-router';
@@ -18,18 +19,18 @@ import {
 } from '~/server/routers/auth/validation';
 
 export default function EnableTwoFactor() {
+  const { t } = useLingui();
   const session = auth.useSession();
   const [user, setUser] = useState(createDefaultUserEnableTwoFactor());
 
   if (session.isPending) return <ActivityIndicator className={'mt-10'} />;
   if (!session.data) return <Redirect href={'/sign-in'} />;
-  if (!session.data.user.emailVerified)
-    return <Redirect href={'/verify-email'} />;
+  if (!session.data.user.emailVerified) return <Redirect href={'/verify-email'} />;
   if (session.data.user.twoFactorEnabled) return <Redirect href={'/'} />;
 
   return (
     <View className={'flex flex-col items-center justify-center gap-4 p-4'}>
-      <Text className={'font-semibold'}>Enable two-factor authentication</Text>
+      <Text className={'font-semibold'}>{t`Enable two-factor authentication`}</Text>
       {user.step === 'password' ? (
         <EnableTwoFactorPasswordStep user={user} setUser={setUser} />
       ) : user.step === 'scan' ? (
@@ -47,14 +48,14 @@ interface EnableTwoFactorStepProps {
 }
 
 function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
+  const { t } = useLingui();
   const enableTwoFactor = useMutation({
     mutationFn: async (data: Parameters<typeof auth.twoFactor.enable>[0]) => {
       const response = await auth.twoFactor.enable(data);
       if (response.error) throw new Error(response.error.message);
       return response.data;
     },
-    onSuccess: (data) =>
-      props.setUser({ ...props.user, step: 'scan', ...data }),
+    onSuccess: (data) => props.setUser({ ...props.user, step: 'scan', ...data }),
   });
 
   const form = useAppForm({
@@ -65,7 +66,7 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
         await enableTwoFactor.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
-          Toast.show({ type: 'error', text1: 'Error', text2: error.message });
+          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
       }
     },
   });
@@ -84,12 +85,13 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
           name={'password'}
           children={(field) => (
             <field.TextField
+              label={t`Password`}
               onSubmitEditing={form.handleSubmit}
               secureTextEntry
             />
           )}
         />
-        <form.SubmitButton label={'Continue'} />
+        <form.SubmitButton label={t`Continue`} />
       </form.AppForm>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
@@ -97,7 +99,7 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => signOut.mutate()}>
-          Back
+          {t`Back`}
         </Text>
       </View>
     </>
@@ -105,6 +107,7 @@ function EnableTwoFactorPasswordStep(props: EnableTwoFactorStepProps) {
 }
 
 function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
+  const { t } = useLingui();
   const copyToClipboard = useMutation({
     mutationFn: async (data: string) => {
       await Clipboard.setStringAsync(data);
@@ -119,8 +122,7 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
   return (
     <>
       <Text className={'text-center'}>
-        Open your authenticator app and scan the QR code to set up two-factor
-        authentication on your device.
+        {t`Open your authenticator app and scan the QR code to set up two-factor authentication on your device.`}
       </Text>
       <QRCode value={props.user.totpURI} />
       <Button
@@ -132,7 +134,7 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
             className={cn('transition-opacity', {
               'opacity-0': copyToClipboard.status === 'success',
             })}>
-            Copy setup key
+            {t`Copy setup key`}
           </Text>
           <Text
             className={cn('absolute text-lg opacity-0 transition-opacity', {
@@ -143,11 +145,10 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
         </View>
       </Button>
       <Text className={'text-center'}>
-        Once it’s all set up, click the button below to verify that everything
-        works.
+        {t`Once it’s all set up, click the button below to verify that everything works.`}
       </Text>
       <Button onPress={() => props.setUser({ ...props.user, step: 'verify' })}>
-        <Text>Continue</Text>
+        <Text>{t`Continue`}</Text>
       </Button>
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
@@ -155,7 +156,7 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'password' })}>
-          Back
+          {t`Back`}
         </Text>
       </View>
     </>
@@ -163,10 +164,9 @@ function EnableTwoFactorScanStep(props: EnableTwoFactorStepProps) {
 }
 
 function EnableTwoFactorVerifyStep(props: EnableTwoFactorStepProps) {
+  const { t } = useLingui();
   const verifyTotp = useMutation({
-    mutationFn: async (
-      data: Parameters<typeof auth.twoFactor.verifyTotp>[0]
-    ) => {
+    mutationFn: async (data: Parameters<typeof auth.twoFactor.verifyTotp>[0]) => {
       const response = await auth.twoFactor.verifyTotp(data);
       if (response.error) throw new Error(response.error.message);
     },
@@ -174,16 +174,14 @@ function EnableTwoFactorVerifyStep(props: EnableTwoFactorStepProps) {
 
   return (
     <>
-      <TwoFactorTOTPSection
-        onComplete={(code) => verifyTotp.mutate({ code })}
-      />
+      <TwoFactorTOTPSection onComplete={(code) => verifyTotp.mutate({ code })} />
       <View className={'flex flex-row items-center justify-center gap-1'}>
         <Text
           className={
             'text-gray-500 transition-colors hover:text-gray-400 active:text-gray-500'
           }
           onPress={() => props.setUser({ ...props.user, step: 'scan' })}>
-          Back
+          {t`Back`}
         </Text>
       </View>
     </>

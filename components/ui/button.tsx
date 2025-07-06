@@ -66,34 +66,33 @@ type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> &
     children?: React.ReactNode;
   };
 
-const Button = React.forwardRef<
-  React.ElementRef<typeof Pressable>,
-  ButtonProps
->(({ className, variant, size, children, loading, ...props }, ref) => {
-  return (
-    <TextClassContext.Provider
-      value={buttonTextVariants({
-        variant,
-        size,
-        className: 'web:pointer-events-none',
-      })}>
-      <Pressable
-        className={cn(
-          {
-            'opacity-50 disabled:hover:opacity-50 web:pointer-events-none':
-              loading || props.disabled,
-          },
-          buttonVariants({ variant, size, className })
-        )}
-        ref={ref}
-        role={'button'}
-        {...props}>
-        <View className={cn({ 'opacity-0': loading })}>{children}</View>
-        {loading && <ActivityIndicator className={'absolute'} />}
-      </Pressable>
-    </TextClassContext.Provider>
-  );
-});
+const Button = React.forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>(
+  ({ className, variant, size, children, loading, ...props }, ref) => {
+    return (
+      <TextClassContext.Provider
+        value={buttonTextVariants({
+          variant,
+          size,
+          className: 'web:pointer-events-none',
+        })}>
+        <Pressable
+          className={cn(
+            {
+              'opacity-50 disabled:hover:opacity-50 web:pointer-events-none':
+                loading || props.disabled,
+            },
+            buttonVariants({ variant, size, className })
+          )}
+          ref={ref}
+          role={'button'}
+          {...props}>
+          <View className={cn({ 'opacity-0': loading })}>{children}</View>
+          {loading && <ActivityIndicator className={'absolute'} />}
+        </Pressable>
+      </TextClassContext.Provider>
+    );
+  }
+);
 Button.displayName = 'Button';
 
 export { Button, buttonTextVariants, buttonVariants };

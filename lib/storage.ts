@@ -3,9 +3,9 @@ import { Platform } from 'react-native';
 
 export const storage = {
   set: (key: string, value: string) => {
-    if (Platform.OS === 'web' && typeof window !== 'undefined')
-      localStorage.setItem(key, value);
-    else SecureStore.setItem(key, value);
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined') localStorage.setItem(key, value);
+    } else SecureStore.setItem(key, value);
   },
   get: (key: string) => {
     if (Platform.OS === 'web')
