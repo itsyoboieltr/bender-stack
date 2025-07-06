@@ -5,7 +5,7 @@ import { minPasswordLength, otp } from '~/lib/shared';
 
 export const userSignInSchema = z.object({
   email: z
-    .email()
+    .email({ error: () => t`Invalid email address` })
     .trim()
     .min(1, { error: () => t`Email cannot be empty` }),
   password: z
@@ -29,7 +29,7 @@ export const userSignUpSchema = z.object({
     .trim()
     .min(1, { error: () => t`Name cannot be empty` }),
   email: z
-    .email()
+    .email({ error: () => t`Invalid email address` })
     .trim()
     .min(1, { error: () => t`Email cannot be empty` }),
   password: z
@@ -50,7 +50,7 @@ export const createDefaultUserSignUp = (): UserSignUp => ({
 
 export const userForgotPasswordSchema = z.object({
   email: z
-    .email()
+    .email({ error: () => t`Invalid email address` })
     .trim()
     .min(1, { error: () => t`Email cannot be empty` }),
 });
@@ -59,7 +59,7 @@ export const userResetPasswordSchema = z
   .object({
     step: z.union([z.literal('email'), z.literal('otp'), z.literal('reset')]),
     email: z
-      .email()
+      .email({ error: () => t`Invalid email address` })
       .trim()
       .min(1, { error: () => t`Email cannot be empty` }),
     otp: z
