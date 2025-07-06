@@ -23,6 +23,7 @@ import Toast from 'react-native-toast-message';
 
 import { Text } from '~/components/ui/text';
 import { clientEnv } from '~/lib/env/client';
+import { messages } from '~/lib/shared';
 import {
   DARK_THEME,
   getLocale,
@@ -35,6 +36,8 @@ import type { AppRouter } from '~/server';
 import '@formatjs/intl-locale/polyfill-force';
 import '@formatjs/intl-pluralrules/polyfill-force';
 import '../global.css';
+
+i18n.load(messages);
 
 setLocale(getLocale());
 

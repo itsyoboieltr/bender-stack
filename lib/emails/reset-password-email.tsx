@@ -1,4 +1,4 @@
-import { type I18n, setupI18n } from '@lingui/core';
+import type { I18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import {
   Body,
@@ -15,15 +15,12 @@ import type { emailOTP } from 'better-auth/plugins';
 import { serverEnv } from '~/lib/env/server';
 import { otp } from '~/lib/shared';
 import { transporter } from '~/server/email';
-import { getLocaleFromRequest } from '~/server/utils';
+import { getI18n } from '~/server/utils';
 
 type SendVerificationOTP = Parameters<typeof emailOTP>[0]['sendVerificationOTP'];
 
 export const sendResetPasswordEmail: SendVerificationOTP = async (data, request) => {
-  const i18n = setupI18n({
-    locale: getLocaleFromRequest(request),
-    messages: { en: require('~/locales/en/messages.po') },
-  });
+  const i18n = getI18n(request);
   await transporter.sendMail({
     from: serverEnv.SMTP_USERNAME,
     to: data.email,
@@ -43,10 +40,7 @@ ResetPasswordEmail.PreviewProps = {
     otp: '123456',
     type: 'forget-password',
   },
-  i18n: setupI18n({
-    locale: 'en',
-    messages: { en: require('~/locales/en/messages.po') },
-  }),
+  i18n: getI18n(),
 } satisfies ResetPasswordEmailProps;
 
 export default function ResetPasswordEmail({ data, i18n }: ResetPasswordEmailProps) {

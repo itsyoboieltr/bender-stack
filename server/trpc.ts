@@ -1,19 +1,14 @@
-import { setupI18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { initTRPC, TRPCError } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { ZodError } from 'zod/v4';
 
-import { getLocaleFromRequest } from '~/server/utils';
-
-import { auth } from './auth';
+import { auth } from '~/server/auth';
+import { getI18n } from '~/server/utils';
 
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
   const session = await auth.api.getSession({ headers: opts.req.headers });
-  const i18n = setupI18n({
-    locale: getLocaleFromRequest(opts.req),
-    messages: { en: require('~/locales/en/messages.po') },
-  });
+  const i18n = getI18n(opts.req);
   return { auth: session, i18n };
 };
 

@@ -1,16 +1,22 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2025-07-06 14:48+0400\n"
+"POT-Creation-Date: 2025-07-06 16:36+0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #. placeholder {0}: e.message
 #. placeholder {0}: error.message
-#: app/_layout.tsx:73
-#: app/_layout.tsx:77
+#: app/_layout.tsx:76
+#: app/_layout.tsx:80
 #: app/(auth)/sign-up.tsx:42
 #: app/(auth)/sign-in.tsx:72
 #: app/(auth)/forgot-password.tsx:70
@@ -70,8 +76,8 @@ msgstr "Email cannot be empty"
 msgid "Enable two-factor authentication"
 msgstr "Enable two-factor authentication"
 
-#: app/_layout.tsx:73
-#: app/_layout.tsx:77
+#: app/_layout.tsx:76
+#: app/_layout.tsx:80
 #: app/(auth)/sign-up.tsx:42
 #: app/(auth)/sign-in.tsx:72
 #: app/(auth)/forgot-password.tsx:70
@@ -90,11 +96,11 @@ msgstr "Forgot password"
 msgid "Id cannot be empty"
 msgstr "Id cannot be empty"
 
-#: lib/emails/reset-password-email.tsx:68
+#: lib/emails/reset-password-email.tsx:62
 msgid "If you do not want to change your password or did not request this, just ignore and delete this message."
 msgstr "If you do not want to change your password or did not request this, just ignore and delete this message."
 
-#: lib/emails/verification-email.tsx:68
+#: lib/emails/verification-email.tsx:62
 msgid "If you do not want to verify your email or did not request this, just ignore and delete this message."
 msgstr "If you do not want to verify your email or did not request this, just ignore and delete this message."
 
@@ -150,9 +156,9 @@ msgstr "Passwords must match"
 msgid "Please enter the {0} digit code from your authenticator app."
 msgstr "Please enter the {0} digit code from your authenticator app."
 
-#: lib/emails/reset-password-email.tsx:30
-#: lib/emails/reset-password-email.tsx:56
-#: lib/emails/reset-password-email.tsx:59
+#: lib/emails/reset-password-email.tsx:27
+#: lib/emails/reset-password-email.tsx:50
+#: lib/emails/reset-password-email.tsx:53
 msgid "Reset your password"
 msgstr "Reset your password"
 
@@ -174,7 +180,7 @@ msgid "Sign up"
 msgstr "Sign up"
 
 #. placeholder {0}: otp.expiresIn / 60
-#: lib/emails/reset-password-email.tsx:62
+#: lib/emails/reset-password-email.tsx:56
 msgid "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
 msgstr "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
 
@@ -188,14 +194,14 @@ msgid "Success"
 msgstr "Success"
 
 #: app/(auth)/verify-email.tsx:38
-#: lib/emails/verification-email.tsx:30
-#: lib/emails/verification-email.tsx:56
-#: lib/emails/verification-email.tsx:59
+#: lib/emails/verification-email.tsx:27
+#: lib/emails/verification-email.tsx:50
+#: lib/emails/verification-email.tsx:53
 msgid "Verify your email address"
 msgstr "Verify your email address"
 
 #. placeholder {0}: otp.expiresIn / 60
-#: lib/emails/verification-email.tsx:62
+#: lib/emails/verification-email.tsx:56
 msgid "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {0} minutes"
 msgstr "We want to make sure it's really you. Please enter the following code when prompted. This code will expire in {0} minutes"
 
@@ -204,7 +210,7 @@ msgstr "We want to make sure it's really you. Please enter the following code wh
 msgid "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
 msgstr "We've sent you a mail. Please check your inbox and enter the {0} digit code to verify your email."
 
-#: server/trpc.ts:38
+#: server/trpc.ts:33
 msgid "You are not authorized to access this resource"
 msgstr "You are not authorized to access this resource"
 

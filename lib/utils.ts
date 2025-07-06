@@ -15,10 +15,9 @@ import Negotiator from 'negotiator';
 import { twMerge } from 'tailwind-merge';
 
 import { clientEnv } from '~/lib/env/client';
+import { type Locale, locales, sourceLocale } from '~/lib/i18n';
 import { storage } from '~/lib/storage';
 import type { AppRouter } from '~/server';
-
-import { fallbackLocale, type SupportedLocale, supportedLocales } from './shared';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -59,33 +58,22 @@ export const DARK_THEME: Theme = {
 };
 
 export const getLocale = () => {
-  const locales = getLocales()
+  const storedLocale = storage.get('locale') as Locale | null;
+  if (storedLocale) return storedLocale;
+
+  const deviceLocales = getLocales()
     .map((locale) => locale.languageCode)
     .filter((locale) => locale !== null);
 
   const deviceLocale = new Negotiator({
-    headers: { 'accept-language': locales.join(', ') },
-  }).language([...supportedLocales]) as SupportedLocale | undefined;
+    headers: { 'accept-language': deviceLocales.join(', ') },
+  }).language([...locales]) as Locale | undefined;
 
-  const defaultLocale = deviceLocale ?? fallbackLocale;
-
-  const storedLanguage = storage.get('locale') as SupportedLocale | null;
-
-  const language = storedLanguage
-    ? supportedLocales.includes(storedLanguage)
-      ? storedLanguage
-      : defaultLocale
-    : defaultLocale;
-
-  return language;
+  return deviceLocale ?? sourceLocale;
 };
 
-export const setLocale = (locale: SupportedLocale) => {
-  if (locale === 'en')
-    i18n.loadAndActivate({
-      locale,
-      messages: require('~/locales/en/messages.po'),
-    });
+export const setLocale = (locale: Locale) => {
+  i18n.activate(locale);
   storage.set('locale', locale);
 };
 

@@ -1,5 +1,7 @@
 import type { emailOTP, twoFactor } from 'better-auth/plugins';
 
+import { messages as en } from '~/locales/en/messages.po';
+
 export const minPasswordLength = 8;
 
 export const otp = {
@@ -11,8 +13,4 @@ export const totp = {
   digits: 6,
 } as const satisfies NonNullable<Parameters<typeof twoFactor>[0]>['totpOptions'];
 
-export const supportedLocales = ['en'] as const;
-
-export type SupportedLocale = (typeof supportedLocales)[number];
-
-export const fallbackLocale = 'en' satisfies SupportedLocale;
+export const messages = { en };
