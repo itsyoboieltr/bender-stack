@@ -1,6 +1,7 @@
+import { hashPassword } from 'better-auth/crypto';
 import { count } from 'drizzle-orm';
+import { ulid } from 'ulidx';
 
-import { auth } from '~/server/auth';
 import { db } from '~/server/db';
 import * as schema from '~/server/routers/schema';
 
@@ -9,12 +10,10 @@ const [user] = await db.select({ count: count() }).from(schema.user);
 if (!user?.count) {
   console.log('[⣷] No users found, creating a default admin user...');
 
-  const authContext = await auth.$context;
-
   const [adminUser] = await db
     .insert(schema.user)
     .values({
-      id: authContext.generateId({ model: 'user' }),
+      id: ulid(),
       name: 'Admin',
       email: 'admin@admin.com',
       emailVerified: true,
@@ -25,11 +24,11 @@ if (!user?.count) {
   if (!adminUser) throw new Error('[⨯] Failed to create default admin user.');
 
   await db.insert(schema.account).values({
-    id: authContext.generateId({ model: 'account' }),
-    accountId: authContext.generateId({ model: 'account' }),
+    id: ulid(),
+    accountId: ulid(),
     providerId: 'credential',
     userId: adminUser.id,
-    password: await authContext.password.hash('admin-password'),
+    password: await hashPassword('admin-password'),
     createdAt: new Date(),
     updatedAt: new Date(),
   });
