@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #. placeholder {0}: e.message
 #. placeholder {0}: error.message
@@ -13,8 +19,8 @@ msgstr ""
 #: app/_layout.tsx:80
 #: app/(auth)/sign-up.tsx:42
 #: app/(auth)/sign-in.tsx:72
-#: app/(auth)/forgot-password.tsx:70
-#: app/(auth)/forgot-password.tsx:145
+#: app/(auth)/forgot-password.tsx:65
+#: app/(auth)/forgot-password.tsx:140
 #: app/(auth)/enable-two-factor.tsx:69
 #: app/(app)/index.tsx:44
 msgid "{0}"
@@ -26,20 +32,20 @@ msgstr "Already have an account?"
 
 #: app/(auth)/verify-email.tsx:51
 #: app/(auth)/sign-in.tsx:143
-#: app/(auth)/forgot-password.tsx:91
-#: app/(auth)/forgot-password.tsx:111
-#: app/(auth)/forgot-password.tsx:177
+#: app/(auth)/forgot-password.tsx:86
+#: app/(auth)/forgot-password.tsx:106
+#: app/(auth)/forgot-password.tsx:172
 #: app/(auth)/enable-two-factor.tsx:102
 #: app/(auth)/enable-two-factor.tsx:159
 #: app/(auth)/enable-two-factor.tsx:184
 msgid "Back"
 msgstr "Back"
 
-#: app/(auth)/forgot-password.tsx:163
+#: app/(auth)/forgot-password.tsx:158
 msgid "Confirm new password"
 msgstr "Confirm new password"
 
-#: app/(auth)/forgot-password.tsx:84
+#: app/(auth)/forgot-password.tsx:79
 #: app/(auth)/enable-two-factor.tsx:94
 #: app/(auth)/enable-two-factor.tsx:151
 msgid "Continue"
@@ -55,7 +61,7 @@ msgstr "Data cannot be empty"
 
 #: app/(auth)/sign-up.tsx:56
 #: app/(auth)/sign-in.tsx:85
-#: app/(auth)/forgot-password.tsx:81
+#: app/(auth)/forgot-password.tsx:76
 msgid "Email"
 msgstr "Email"
 
@@ -74,8 +80,8 @@ msgstr "Enable two-factor authentication"
 #: app/_layout.tsx:80
 #: app/(auth)/sign-up.tsx:42
 #: app/(auth)/sign-in.tsx:72
-#: app/(auth)/forgot-password.tsx:70
-#: app/(auth)/forgot-password.tsx:145
+#: app/(auth)/forgot-password.tsx:65
+#: app/(auth)/forgot-password.tsx:140
 #: app/(auth)/enable-two-factor.tsx:69
 #: app/(app)/index.tsx:44
 msgid "Error"
@@ -113,7 +119,7 @@ msgstr "Name"
 msgid "Name cannot be empty"
 msgstr "Name cannot be empty"
 
-#: app/(auth)/forgot-password.tsx:156
+#: app/(auth)/forgot-password.tsx:151
 msgid "New password"
 msgstr "New password"
 
@@ -185,12 +191,12 @@ msgstr "Sign up"
 msgid "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
 msgstr "Someone recently requested a password change for your account. If this was you, you can set a new password by entering the following code when prompted. This code will expire in {0} minutes."
 
-#: app/(auth)/forgot-password.tsx:169
+#: app/(auth)/forgot-password.tsx:164
 #: app/(app)/index.tsx:80
 msgid "Submit"
 msgstr "Submit"
 
-#: app/(auth)/forgot-password.tsx:130
+#: app/(auth)/forgot-password.tsx:125
 msgid "Success"
 msgstr "Success"
 
@@ -215,6 +221,6 @@ msgstr "We've sent you a mail. Please check your inbox and enter the {0} digit c
 msgid "You are not authorized to access this resource"
 msgstr "You are not authorized to access this resource"
 
-#: app/(auth)/forgot-password.tsx:131
+#: app/(auth)/forgot-password.tsx:126
 msgid "Your password was successfully reset"
 msgstr "Your password was successfully reset"
