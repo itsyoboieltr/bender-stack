@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro';
 import { createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod/v4';
+import type { z } from 'zod';
 
 import { todo } from './table';
 

@@ -1,5 +1,5 @@
 import { t } from '@lingui/core/macro';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 import { minPasswordLength, otp } from '~/lib/shared';
 

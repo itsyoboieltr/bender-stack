@@ -1,7 +1,7 @@
 import { msg } from '@lingui/core/macro';
 import { initTRPC, TRPCError } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { ZodError } from 'zod/v4';
+import { ZodError } from 'zod';
 
 import { auth } from '~/server/auth';
 import { getI18n } from '~/server/utils';
