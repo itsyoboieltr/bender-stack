@@ -13,7 +13,7 @@
     "db:seed": "bun seed.ts",
     "auth:generate": "bunx @better-auth/cli generate --output server/routers/auth/table.ts",
     "auth:secret": "bunx @better-auth/cli secret",
-    "email:dev": "cp .env ./node_modules/react-email/dist/preview && email dev --port 3001 --dir lib/emails",
+    "email:dev": "cp .env ./node_modules/@react-email/preview-server && email dev --port 3001 --dir lib/emails",
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
@@ -75,6 +75,7 @@
     "@biomejs/biome": "2.1.2",
     "@lingui/babel-plugin-lingui-macro": "5.3.3",
     "@lingui/metro-transformer": "5.3.3",
+    "@react-email/preview-server": "4.2.3",
     "@types/bun": "1.2.19",
     "@types/negotiator": "0.6.4",
     "@types/nodemailer": "6.4.17",
