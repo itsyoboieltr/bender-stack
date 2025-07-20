@@ -21,14 +21,14 @@ export const auth = betterAuth({
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 300, // 5 mins
+      maxAge: 5 * 60, // 5 mins
     },
   },
   plugins: [
     admin(),
     emailOTP({
       ...otp,
-      disableSignUp: true, // disable automatic sign-up
+      disableSignUp: true,
       sendVerificationOTP: async (data, request) => {
         if (data.type === 'email-verification')
           return await sendVerificationEmail(data, request);

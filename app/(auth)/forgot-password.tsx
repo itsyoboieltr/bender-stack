@@ -45,11 +45,9 @@ interface ForgotPasswordStepProps {
 
 function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
   const { t } = useLingui();
-  const sendVerificationOtp = useMutation({
-    mutationFn: async (
-      data: Parameters<typeof auth.emailOtp.sendVerificationOtp>[0]
-    ) => {
-      const response = await auth.emailOtp.sendVerificationOtp(data);
+  const forgetPassword = useMutation({
+    mutationFn: async (data: Parameters<typeof auth.forgetPassword.emailOtp>[0]) => {
+      const response = await auth.forgetPassword.emailOtp(data);
       if (response.error) throw new Error(response.error.message);
     },
     onSuccess: (_, variables) =>
@@ -61,10 +59,7 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
     validators: { onSubmit: userForgotPasswordSchema },
     onSubmit: async ({ value }) => {
       try {
-        await sendVerificationOtp.mutateAsync({
-          email: value.email,
-          type: 'forget-password',
-        });
+        await forgetPassword.mutateAsync(value);
       } catch (error) {
         if (Error.isError(error))
           Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
