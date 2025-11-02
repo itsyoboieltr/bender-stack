@@ -1,6 +1,6 @@
 import type { emailOTP, twoFactor } from 'better-auth/plugins';
 
-import { messages as en } from '~/locales/en/messages.po';
+import { messages as en } from '~/locales/en.po';
 
 export const minPasswordLength = 8;
 
