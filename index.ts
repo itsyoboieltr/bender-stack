@@ -1,9 +1,12 @@
 import path from 'node:path';
-import { createRequestHandler } from '@expo/server';
+import { createRequestHandler } from 'expo-server/adapter/bun';
 
 import { name } from '~/package.json';
 
-const handler = createRequestHandler(path.join(import.meta.dir, 'dist/server'));
+const handler = createRequestHandler({
+  build: path.join(process.cwd(), 'dist/server'),
+  environment: process.env.NODE_ENV,
+});
 
 const server = Bun.serve({
   routes: {

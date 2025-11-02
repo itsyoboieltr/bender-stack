@@ -61,8 +61,9 @@ function ForgotPasswordEmailStep(props: ForgotPasswordStepProps) {
       try {
         await forgetPassword.mutateAsync(value);
       } catch (error) {
-        if (Error.isError(error))
-          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
+        const message =
+          error instanceof Error ? t`${error.message}` : t`Unknown error.`;
+        Toast.show({ type: 'error', text1: t`Error`, text2: message });
       }
     },
   });
@@ -136,8 +137,9 @@ function ForgotPasswordResetStep(props: ForgotPasswordStepProps) {
       try {
         await resetPassword.mutateAsync(value);
       } catch (error) {
-        if (Error.isError(error))
-          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
+        const message =
+          error instanceof Error ? t`${error.message}` : t`Unknown error.`;
+        Toast.show({ type: 'error', text1: t`Error`, text2: message });
       }
     },
   });

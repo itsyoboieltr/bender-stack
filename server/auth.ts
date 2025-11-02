@@ -1,3 +1,4 @@
+import { expo } from '@better-auth/expo';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import {
@@ -17,6 +18,7 @@ import { db } from './db';
 
 export const auth = betterAuth({
   appName,
+  trustedOrigins: ['exp://', 'bender://'],
   database: drizzleAdapter(db, { provider: 'pg' }),
   session: {
     cookieCache: {
@@ -37,6 +39,7 @@ export const auth = betterAuth({
       },
     }),
     twoFactor({ issuer: appName, totpOptions: { ...totp } }),
+    expo(),
   ],
   advanced: { database: { generateId: () => ulid() } },
   emailAndPassword: { enabled: true, minPasswordLength },

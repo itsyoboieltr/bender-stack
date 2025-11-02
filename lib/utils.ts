@@ -1,3 +1,4 @@
+import { expoClient } from '@better-auth/expo/client';
 import { i18n } from '@lingui/core';
 import { DefaultTheme, type Theme } from '@react-navigation/native';
 import { createFormHookContexts } from '@tanstack/react-form';
@@ -10,6 +11,7 @@ import {
 import { createAuthClient } from 'better-auth/react';
 import { type ClassValue, clsx } from 'clsx';
 import { getLocales } from 'expo-localization';
+import * as SecureStore from 'expo-secure-store';
 import { useColorScheme as useNativewindColorScheme } from 'nativewind';
 import Negotiator from 'negotiator';
 import { twMerge } from 'tailwind-merge';
@@ -79,7 +81,12 @@ export const setLocale = (locale: Locale) => {
 
 export const auth = createAuthClient({
   baseURL: clientEnv.EXPO_PUBLIC_HOST_URL,
-  plugins: [adminClient(), emailOTPClient(), twoFactorClient()],
+  plugins: [
+    adminClient(),
+    emailOTPClient(),
+    twoFactorClient(),
+    expoClient({ storagePrefix: 'bender', storage: SecureStore }),
+  ],
   fetchOptions: {
     onRequest: (context) => {
       context.headers.set('Accept-Language', getLocale());

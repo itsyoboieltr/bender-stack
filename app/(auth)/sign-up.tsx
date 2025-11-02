@@ -38,8 +38,9 @@ export default function SignUp() {
       try {
         await signUp.mutateAsync(value);
       } catch (error) {
-        if (Error.isError(error))
-          Toast.show({ type: 'error', text1: t`Error`, text2: t`${error.message}` });
+        const message =
+          error instanceof Error ? t`${error.message}` : t`Unknown error.`;
+        Toast.show({ type: 'error', text1: t`Error`, text2: message });
       }
     },
   });
