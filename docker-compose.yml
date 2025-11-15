@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     healthcheck:
       test: pg_isready
@@ -15,9 +15,9 @@ services:
       PGDATABASE: ${POSTGRES_DB}
       PGPORT: ${POSTGRES_PORT}
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql
     labels:
-      - docker-volume-backup.archive-pre=/bin/sh -c 'mkdir -p /var/lib/postgresql/data/backup && pg_dump > /var/lib/postgresql/data/backup/dump.sql'
+      - docker-volume-backup.archive-pre=/bin/sh -c 'mkdir -p /var/lib/postgresql/backup && pg_dump > /var/lib/postgresql/backup/dump.sql'
 
   backup:
     image: offen/docker-volume-backup:v2
@@ -42,6 +42,7 @@ services:
     build:
       context: .
       args:
+        NODE_ENV: production
         EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL}
     depends_on:
       postgres:
@@ -49,18 +50,21 @@ services:
     ports:
       - ${PORT}:${PORT}
     environment:
+      NODE_ENV: production
       PORT: ${PORT}
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SSL: ${POSTGRES_SSL}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_SSL: ${SMTP_SSL}
 
 volumes:
   postgres:

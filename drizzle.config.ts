@@ -13,5 +13,6 @@ export default defineConfig({
     user: serverEnv.POSTGRES_USER,
     password: serverEnv.POSTGRES_PASSWORD,
     database: serverEnv.POSTGRES_DB,
+    ssl: serverEnv.POSTGRES_SSL,
   },
 });

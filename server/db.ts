@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres, { type Sql } from 'postgres';
+import { drizzle, type NodePgClient } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
 import { serverEnv } from '~/lib/env/server';
 
@@ -10,22 +10,27 @@ import * as schema from './routers/schema';
  * update.
  */
 const globalForDb = globalThis as unknown as {
-  conn: Sql | undefined;
+  pool: NodePgClient;
 };
 
-const conn =
-  globalForDb.conn ??
-  postgres({
+const pool =
+  globalForDb.pool ??
+  new Pool({
     host: serverEnv.POSTGRES_HOST,
     port: serverEnv.POSTGRES_PORT,
     user: serverEnv.POSTGRES_USER,
     password: serverEnv.POSTGRES_PASSWORD,
     database: serverEnv.POSTGRES_DB,
+    ssl: serverEnv.POSTGRES_SSL,
   });
-if (process.env.NODE_ENV !== 'production') globalForDb.conn = conn;
 
-export const db = drizzle(conn, {
+if (process.env.NODE_ENV !== 'production') {
+  globalForDb.pool = pool;
+}
+
+export const db = drizzle({
+  client: pool,
   schema,
-  casing: 'snake_case',
   logger: process.env.NODE_ENV === 'development',
+  casing: 'snake_case',
 });

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     healthcheck:
       test: pg_isready
@@ -17,7 +17,7 @@ services:
       PGDATABASE: ${POSTGRES_DB}
       PGPORT: ${POSTGRES_PORT}
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql
 
   app:
     image: bender/app:latest
@@ -25,6 +25,7 @@ services:
     build:
       context: .
       args:
+        NODE_ENV: development
         EXPO_PUBLIC_HOST_URL: ${EXPO_PUBLIC_HOST_URL}
     depends_on:
       postgres:
@@ -32,18 +33,21 @@ services:
     ports:
       - ${PORT}:${PORT}
     environment:
+      NODE_ENV: development
       PORT: ${PORT}
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SSL: ${POSTGRES_SSL}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_SSL: ${SMTP_SSL}
     volumes:
       - ./:/app
       - /app/node_modules
